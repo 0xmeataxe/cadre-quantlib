@@ -24,7 +24,7 @@
 #ifndef quantlib_barrier_option_h
 #define quantlib_barrier_option_h
 
-#include <ql/Instruments/vanillaoption.hpp>
+#include <ql/Instruments/oneassetstrikedoption.hpp>
 
 namespace QuantLib {
 
@@ -35,10 +35,9 @@ namespace QuantLib {
 
     //! Barrier option on a single asset.
     /*! The analytic pricing engine will be used if none if passed. */
-    class BarrierOption : public Option {
+    class BarrierOption : public OneAssetStrikedOption {
       public:
         class arguments;
-        class results;
         BarrierOption(Barrier::Type barrierType,
                       double barrier,
                       double rebate,
@@ -53,46 +52,23 @@ namespace QuantLib {
                       Handle<PricingEngine>(),
                       const std::string& isinCode = "",
                       const std::string& description = "");
-        //! \name greeks
-        //@{
-        double delta() const;
-        double gamma() const;
-        double theta() const;
-        double vega() const;
-        double rho() const;
-        double dividendRho() const;
-        double strikeSensitivity() const;
-        //@}
-        bool isExpired() const;
         void setupArguments(Arguments*) const;
       protected:
-        void setupExpired() const;
         void performCalculations() const;
-        // results
-        mutable double delta_, gamma_, theta_, 
-                       vega_, rho_, dividendRho_, strikeSensitivity_;
         // arguments
         Barrier::Type barrierType_;
         double barrier_;
         double rebate_;
-        Handle<Payoff> payoff_;
-        RelinkableHandle<Quote> underlying_;
-        Exercise exercise_;
-        RelinkableHandle<TermStructure> riskFreeTS_, dividendTS_;
-        RelinkableHandle<BlackVolTermStructure> volTS_;
     };
 
     //! %arguments for barrier option calculation
-    class BarrierOption::arguments : public VanillaOption::arguments {
+    class BarrierOption::arguments : public OneAssetStrikedOption::arguments {
       public:
         Barrier::Type barrierType;
         double barrier;
         double rebate;
         void validate() const;
     };
-
-    //! %results from barrier option calculation
-    class BarrierOption::results : public virtual VanillaOption::results {};
 
 }
 
