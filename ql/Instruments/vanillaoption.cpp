@@ -27,10 +27,5 @@ namespace QuantLib {
         const boost::shared_ptr<PricingEngine>& engine)
     : OneAssetStrikedOption(stochProc, payoff, exercise, engine) {}
 
-    void VanillaOption::performCalculations() const {
-        // enforce in this class any check on engine/payoff
-        OneAssetStrikedOption::performCalculations();
-    }
-
 }
 
