@@ -27,7 +27,7 @@
 #ifndef quantlib_crank_nicolson_h
 #define quantlib_crank_nicolson_h
 
-#include <ql/FiniteDifferences/finitedifferencemodel.hpp>
+#include <ql/FiniteDifferences/mixedscheme.hpp>
 
 namespace QuantLib {
 
@@ -68,10 +68,9 @@ namespace QuantLib {
             \warning The differential operator must be linear for
             this evolver to work.
 
-            \todo add Douglas Scheme
         */
         template <class Operator>
-        class CrankNicolson {
+            class CrankNicolson : public MixedScheme<Operator> {
             friend class FiniteDifferenceModel<CrankNicolson<Operator> >;
           private:
             // typedefs
@@ -79,31 +78,9 @@ namespace QuantLib {
             typedef Operator operatorType;
             // constructors
             CrankNicolson(const Operator& L)
-            : L_(L), I_(Operator::identity(L.size())), dt_(0.0) {}
-            void step(arrayType& a, Time t);
-            void setStep(Time dt) {
-                dt_ = dt;
-                explicitPart_ = I_-(dt_/2)*L_;
-                implicitPart_ = I_+(dt_/2)*L_;
-            }
-            Operator L_;
-            Operator I_;
-            Operator explicitPart_, implicitPart_;
-            Time dt_;
+            : MixedScheme<Operator>(L, 0.5) {}
         };
 
-        // inline definitions
-
-        template <class Operator>
-        inline void CrankNicolson<Operator>::step(arrayType& a, Time t) {
-            if (L_.isTimeDependent()) {
-                L_.setTime(t);
-                explicitPart_ = I_-(dt_/2)*L_;
-                L_.setTime(t-dt_);
-                implicitPart_ = I_+(dt_/2)*L_;
-            }
-            a = implicitPart_.solveFor(explicitPart_.applyTo(a));
-        }
 
     }
 
