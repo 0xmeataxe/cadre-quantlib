@@ -25,6 +25,9 @@
     $Source$
     $Name$
     $Log$
+    Revision 1.6  2001/02/05 16:54:05  marmar
+    McAsianPricer replaced by AveragePriceAsian and AverageStrikeAsian
+
     Revision 1.5  2001/01/30 15:57:39  marmar
     Now using OneFactorMonteCarloOption
 
@@ -65,17 +68,19 @@ namespace QuantLib {
             double deltaT = residualTime/timesteps;
             double mu = deltaT * (riskFreeRate - underlyingGrowthRate
                                     - 0.5 * volatility * volatility);
-            double sigma = volatility*QL_SQRT(deltaT);
+                                    
+            double variance = volatility*volatility*deltaT;
 
             Handle<StandardPathGenerator> pathGenerator(
-                    new StandardPathGenerator(timesteps, mu, sigma, seed));
+                    new StandardPathGenerator(timesteps, mu, variance, seed));
             
             //! Initialize the pricer on the single Path 
-            Handle<PathPricer> euroPricer(new EuropeanPathPricer(type,
+            Handle<PathPricer> euroPathPricer(new EuropeanPathPricer(type,
                 underlying, strike, QL_EXP(-riskFreeRate*residualTime)));
                 
-            //! Initialize the one-dimensional Monte Carlo
-            montecarloPricer_ = OneFactorMonteCarloOption(pathGenerator, euroPricer);
+            //! Initialize the one-factor Monte Carlo
+            montecarloPricer_ = OneFactorMonteCarloOption(pathGenerator, 
+                                                     euroPathPricer);
         }
 
     }
