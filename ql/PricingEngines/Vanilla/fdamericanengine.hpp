@@ -31,8 +31,11 @@ namespace QuantLib {
     //! Finite-differences pricing engine for American vanilla options
     /*! \ingroup vanillaengines
 
-        \test the correctness of the returned value is tested by
-              reproducing results available in literature.
+        \test
+        - the correctness of the returned value is tested by
+          reproducing results available in literature.
+        - the correctness of the returned greeks is tested by
+          reproducing numerical derivatives.
     */
     class FDAmericanEngine : public FDStepConditionEngine {
       public:

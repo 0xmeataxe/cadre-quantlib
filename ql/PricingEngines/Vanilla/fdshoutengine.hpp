@@ -29,7 +29,11 @@
 namespace QuantLib {
 
     //! Finite-differences pricing engine for shout vanilla options
-    /*! \ingroup vanillaengines */
+    /*! \ingroup vanillaengines
+
+        \test the correctness of the returned greeks is tested by
+              reproducing numerical derivatives.
+    */
     class FDShoutEngine : public FDStepConditionEngine {
       public:
         FDShoutEngine(Size timeSteps=100, Size gridPoints=100,
@@ -37,11 +41,9 @@ namespace QuantLib {
         : FDStepConditionEngine(timeSteps, gridPoints, timeDependent) {}
       private:
         void initializeStepCondition() const {
-            const boost::shared_ptr<BlackScholesProcess>& process =
-                arguments_.blackScholesProcess;
             Time residualTime = getResidualTime();
-            Rate riskFreeRate = process->riskFreeRate()->zeroRate(residualTime,
-                                                                  Continuous);
+            Rate riskFreeRate = getProcess()->riskFreeRate()
+                ->zeroRate(residualTime, Continuous);
 
             stepCondition_ = boost::shared_ptr<StandardStepCondition>(
                                           new ShoutCondition(intrinsicValues_,
