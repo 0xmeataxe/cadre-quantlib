@@ -19,20 +19,29 @@
     \brief conditions to be applied at every time step
 */
 
-#ifndef quantlib_step_condition_h
-#define quantlib_step_condition_h
+#ifndef quantlib_step_condition_hpp
+#define quantlib_step_condition_hpp
 
-#include <ql/numericalmethod.hpp>
+#include <ql/types.hpp>
 
 namespace QuantLib {
 
     //! condition to be applied at every time step
     /*! \ingroup findiff */
-    template <class arrayType>
+    template <class array_type>
     class StepCondition {
       public:
         virtual ~StepCondition() {}
-        virtual void applyTo(arrayType& a, Time t) const = 0;
+        virtual void applyTo(array_type& a, Time t) const = 0;
+    };
+
+
+    //! null step condition
+    /*! \ingroup findiff */
+    template <class array_type>
+    class NullCondition : public StepCondition<array_type> {
+      public:
+        void applyTo(array_type &a, Time t) const {}
     };
 
 }
