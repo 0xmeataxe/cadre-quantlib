@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2000
  * Ferdinando Ametrano, Luigi Ballabio, Adolfo Benin, Marco Marchioro
@@ -63,4 +62,4 @@
 %include RandomGenerators.i
 %include History.i
 %include Distributions.i
-
+%include MontecarloPricers.i
