@@ -50,6 +50,9 @@ namespace QuantLib {
             I::I();
             Real I::operator() const;
         \endcode
+
+        \deprecated use InverseCumulativeRsg instead
+
     */
     template <class USG, class I>
     class ICGaussianRsg {

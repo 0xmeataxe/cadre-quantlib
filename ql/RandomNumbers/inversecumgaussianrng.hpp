@@ -48,6 +48,9 @@ namespace QuantLib {
             I::I();
             Real I::operator() const;
         \endcode
+
+        \deprecated use InverseCumulativeRng instead
+
     */
     template <class RNG, class I>
     class ICGaussianRng {
