@@ -37,9 +37,8 @@ namespace QuantLib {
       public:
         virtual ~PricingEngine() {}
         virtual Arguments* parameters() = 0;
-        virtual void validateParameters() const = 0;
-        virtual void calculate() const = 0;
         virtual const Results* results() const = 0;
+        virtual void calculate() const = 0;
     };
 
 }

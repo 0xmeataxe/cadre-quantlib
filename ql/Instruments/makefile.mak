@@ -16,12 +16,14 @@ INCLUDE_DIR    = ..\..
 BCC_INCLUDE    = $(MAKEDIR)\..\include
 
 # Object files
-OBJS = capfloor.obj$(_D) \
-       vanillaoption.obj$(_D) \
-       simpleswap.obj$(_D) \
-       stock.obj$(_D) \
-       swap.obj$(_D) \
-       swaption.obj$(_D)
+OBJS = \
+    capfloor.obj$(_D) \
+    quantooption.obj$(_D) \
+    simpleswap.obj$(_D) \
+    stock.obj$(_D) \
+    swap.obj$(_D) \
+    swaption.obj$(_D) \
+    vanillaoption.obj$(_D)
 
 # Tools to be used
 CC        = bcc32

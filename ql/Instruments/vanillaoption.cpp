@@ -16,7 +16,7 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 */
 /*! \file vanillaoption.cpp
-    \brief Plain (no dividends, no barriers) option on a single asset
+    \brief Vanilla (no dividends, no barriers) option on a single asset
 
     \fullpath
     ql/Instruments/%vanillaoption.cpp
@@ -38,7 +38,7 @@ namespace QuantLib {
             const RelinkableHandle<TermStructure>& riskFreeRate,
             const Date& exerciseDate,
             const RelinkableHandle<MarketElement>& volatility,
-            const Handle<PricingEngine>& engine,
+            const Handle<PricingEngines::VanillaEngine>& engine,
             const std::string& isinCode, const std::string& description)
         : Option(engine, isinCode, description), type_(type),
           underlying_(underlying), strike_(strike),
@@ -108,8 +108,8 @@ namespace QuantLib {
         }
 
         void VanillaOption::setupEngine() const {
-            Pricers::VanillaOptionParameters* parameters =
-                dynamic_cast<Pricers::VanillaOptionParameters*>(
+            PricingEngines::VanillaOptionParameters* parameters =
+                dynamic_cast<PricingEngines::VanillaOptionParameters*>(
                     engine_->parameters());
             QL_REQUIRE(parameters != 0,
                        "pricing engine does not supply needed parameters");
@@ -154,7 +154,7 @@ namespace QuantLib {
                 const OptionGreeks* results =
                     dynamic_cast<const OptionGreeks*>(engine_->results());
                 QL_ENSURE(results != 0,
-                          "no greeks returned from option pricer");
+                          "no greeks returned from pricing engine");
                 /* no check on null values - just copy.
                    this allows:
                    a) to decide in derived options what to do when null 
@@ -178,7 +178,7 @@ namespace QuantLib {
         VanillaOption::ImpliedVolHelper::ImpliedVolHelper(
             const Handle<PricingEngine>& engine, double targetValue)
         : engine_(engine), targetValue_(targetValue) {
-            parameters_ = dynamic_cast<Pricers::VanillaOptionParameters*>(
+            parameters_ = dynamic_cast<PricingEngines::VanillaOptionParameters*>(
                 engine_->parameters());
             QL_REQUIRE(parameters_ != 0,
                        "pricing engine does not supply needed parameters");

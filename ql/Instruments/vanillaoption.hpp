@@ -16,7 +16,7 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 */
 /*! \file vanillaoption.hpp
-    \brief Plain (no discrete dividends, no barriers) option on a single asset
+    \brief Vanilla (no discrete dividends, no barriers) option on a single asset
 
     \fullpath
     ql/Instruments/%vanillaoption.hpp
@@ -24,13 +24,13 @@
 
 // $Id$
 
-#ifndef quantlib_plain_option_h
-#define quantlib_plain_option_h
+#ifndef quantlib_vanilla_option_h
+#define quantlib_vanilla_option_h
 
 #include <ql/option.hpp>
 #include <ql/termstructure.hpp>
 #include <ql/solver1d.hpp>
-#include <ql/Pricers/vanillaoptionengine.hpp>
+#include <ql/PricingEngines/vanillaengines.hpp>
 
 namespace QuantLib {
 
@@ -46,7 +46,7 @@ namespace QuantLib {
                         const RelinkableHandle<TermStructure>& riskFreeRate,
                         const Date& exerciseDate,
                         const RelinkableHandle<MarketElement>& volatility,
-                        const Handle<PricingEngine>& engine,
+                        const Handle<PricingEngines::VanillaEngine>& engine,
                         const std::string& isinCode = "",
                         const std::string& description = "");
             //! \name greeks
@@ -93,7 +93,7 @@ namespace QuantLib {
               private:
                 Handle<PricingEngine> engine_;
                 double targetValue_;
-                Pricers::VanillaOptionParameters* parameters_;
+                PricingEngines::VanillaOptionParameters* parameters_;
                 const OptionValue* results_;
             };
         };
