@@ -58,7 +58,7 @@ namespace QuantLib {
                                RandomAccessIteratorY,
                                MatricialData>(
                  xBegin,xEnd,yBegin,yEnd,data) {}
-            double operator()(
+            result_type operator()(
                 const first_argument_type& x,
                 const second_argument_type& y,
                 bool allowExtrapolation = false) const;
