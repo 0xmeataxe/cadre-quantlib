@@ -22,29 +22,37 @@
 
  $Source$
  $Log$
+ Revision 1.2  2001/04/04 14:10:30  lballabio
+ Ruby tests moved on top of RubyUnit
+
  Revision 1.1  2001/04/03 14:50:28  lballabio
  Forgotten makefile
 
 =end
 
 require 'QuantLib'
-require 'TestUnit'
+require 'runit/testcase'
+require 'runit/testsuite'
+require 'runit/cui/testrunner'
 
-TestUnit.test('random number generators') {
-    seed = 576919
-    samples = 1000000
-    [QuantLib::UniformRandomGenerator,
-     QuantLib::GaussianRandomGenerator].each { |rng|
-        rn = rng.new(seed)
-        s = QuantLib::Statistics.new
-        samples.times { s.add(rn.next) }
-        TestUnit.printDetails("#{rng.name[10..-1]}:")
-        TestUnit.printDetails("    mean:            #{s.mean}")
-        TestUnit.printDetails("    std. deviation:  #{s.standardDeviation}")
-        TestUnit.printDetails("    skewness:        #{s.skewness}")
-        TestUnit.printDetails("    exc. kurtosis:   #{s.kurtosis}")
-        TestUnit.printDetails("    minimum:         #{s.min}")
-        TestUnit.printDetails("    maximum:         #{s.max}")
-    }
-}
+class RNGTest < RUNIT::TestCase
+    def name
+        "Testing random number generators..."
+    end
+    def test
+        seed = 576919
+        samples = 1000000
+        [QuantLib::UniformRandomGenerator,
+         QuantLib::GaussianRandomGenerator].each { |rng|
+            rn = rng.new(seed)
+            s = QuantLib::Statistics.new
+            samples.times { s.add(rn.next) }
+            # add some meaningful test here
+        }
+    end
+end
+
+if $0 == __FILE__
+    RUNIT::CUI::TestRunner.run(RNGTest.suite)
+end
 
