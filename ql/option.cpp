@@ -41,22 +41,17 @@ namespace QuantLib {
         QL_REQUIRE(!engine_.isNull(), "null pricing engine passed");
     }
 
+    Option::~Option() {}
+
     void Option::performCalculations() const {
         setupEngine();
+        engine_->validateParameters();
         engine_->calculate();
-        const OptionResults* results = 
-        #if QL_ALLOW_TEMPLATE_METHOD_CALLS
-            engine_->results().downcast<OptionResults>();
-        #else
-            dynamic_cast<const OptionResults*>(engine_->results().pointer());
-        #endif
+        const OptionValue* results = 
+            dynamic_cast<const OptionValue*>(engine_->results());
         QL_ENSURE(results != 0, "no results returned from option pricer");
         NPV_ = results->value;
-        isExpired_ = results->isExpired;
-        QL_ENSURE(isExpired_ || NPV_ != Null<double>(),
-            "null value returned from option pricer");
     }
 
 }
-
 
