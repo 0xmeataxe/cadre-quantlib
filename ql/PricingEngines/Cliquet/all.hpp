@@ -20,6 +20,7 @@
 
 #include <ql/qldefines.hpp>
 #include <ql/PricingEngines/Cliquet/analyticcliquetengine.hpp>
+#include <ql/PricingEngines/Cliquet/analyticperformanceengine.hpp>
 
 
 #endif
