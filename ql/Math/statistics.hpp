@@ -1,7 +1,6 @@
 
 /*
  Copyright (C) 2003 Ferdinando Ametrano
- Copyright (C) 2000, 2001, 2002, 2003 RiskMap srl
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -17,7 +16,7 @@
 */
 
 /*! \file statistics.hpp
-    \brief statistics tool with gaussian risk measures
+    \brief statistics tool with risk measures
 */
 
 // $Id$
@@ -27,30 +26,28 @@
 
 #include <ql/null.hpp>
 #include <ql/dataformatters.hpp>
-#include <ql/Math/normaldistribution.hpp>
 #include <ql/Math/riskmeasures.hpp>
+#include <vector>
 
 namespace QuantLib {
 
     namespace Math {
-
-        //! Statistics tool with gaussian risk measures
-        /*! It can accumulate a set of data and return statistics quantities
+        //! Historical distribution gaussianstatistics tool with risk measures
+        /*! It can accumulate a set of data and return gaussianstatistics quantities
             (e.g: mean, variance, skewness, kurtosis, error estimation,
-            percentile, etc.) plus gaussian assumption risk measures
-            (e.g.: value at risk, expected shortfall, etc.)
+            percentile, etc.) plus risk measures (e.g.: value at risk,
+            expected shortfall, etc.) with gaussian assumption
 
-            \warning high moments are numerically unstable for high
-                     average/standardDeviation ratios
+            It extends the class GaussianStatistics with the penalty of storing
+            all samples, but could be extend to non-gaussian risk measures
         */
         class Statistics {
           public:
-            Statistics();
-            virtual ~Statistics() {};
+            Statistics() { reset(); }
             //! \name Inspectors
             //@{
             //! number of samples collected
-            Size samples() const;
+            Size samples() const { return samples_.size(); }
 
             //! sum of data weights
             double weightSum() const;
@@ -69,26 +66,22 @@ namespace QuantLib {
             /*! returns the standard deviation \f$ \sigma \f$, defined as the
                 square root of the variance.
             */
-            double standardDeviation() const;
+            double standardDeviation() const {
+                return QL_SQRT(variance());
+            }
 
-            /*! returns the downside variance, defined as
-                \f[ \frac{N}{N-1} \times \frac{ \sum_{i=1}^{N}
-                \theta \times x_i^{2}}{ \sum_{i=1}^{N} w_i} \f],
-                where \f$ \theta \f$ = 0 if x > 0 and
-                \f$ \theta \f$ =1 if x <0
-            */
             double downsideVariance() const;
-
-            /*! returns the downside deviation, defined as the
-                square root of the downside variance.
-            */
-            double downsideDeviation() const;
+            double downsideDeviation() const {
+                return QL_SQRT(downsideVariance());
+            }
 
             /*! returns the error estimate \f$ \epsilon \f$, defined as the
                 square root of the ratio of the variance to the number of
                 samples.
             */
-            double errorEstimate() const;
+            double errorEstimate() const {
+                return QL_SQRT(variance()/samples());
+            }
 
             /*! returns the skewness, defined as
                 \f[ \frac{N^2}{(N-1)(N-2)} \frac{\left\langle \left(
@@ -106,46 +99,40 @@ namespace QuantLib {
             double kurtosis() const;
 
             /*! returns the minimum sample value */
-            double min() const;
+            double min() const {
+                return std::min_element(samples_.begin(), samples_.end())->first;
+            }
 
             /*! returns the maximum sample value */
-            double max() const;
+            double max() const {
+                return std::max_element(samples_.begin(), samples_.end())->first;
+            }
 
             /*! gaussian-assumption y-th percentile, defined as the value x
                 such that \f[ y = \frac{1}{\sqrt{2 \pi}}
                                       \int_{-\infty}^{x} \exp (-u^2/2) du \f]
             */
-            double gaussianPercentile(double y) const;
+            double gaussianPercentile(double percentile) const;
+//            double percentile(double percentile) const;
 
             //! gaussian-assumption Potential-Upside at a given percentile
-            double gaussianPotentialUpside(double percentile) const {
-                return rm_.potentialUpside(percentile,
-                    mean(), standardDeviation());
-            }
+            double gaussianPotentialUpside(double percentile) const;
 
             //! gaussian-assumption Value-At-Risk at a given percentile
-            double gaussianValueAtRisk(double percentile) const {
-                return rm_.valueAtRisk(percentile,
-                    mean(), standardDeviation());
-            }
+            double gaussianValueAtRisk(double percentile) const;
 
             //! gaussian-assumption Expected Shortfall at a given percentile
-            double gaussianExpectedShortfall(double percentile) const {
-                return rm_.expectedShortfall(percentile,
-                    mean(), standardDeviation());
-            }
+            double gaussianExpectedShortfall(double percentile) const;
 
             //! gaussian-assumption Shortfall (observations below target)
-            double gaussianShortfall(double target) const {
-                return rm_.shortfall(target,
-                    mean(), standardDeviation());
-            }
+            double gaussianShortfall(double target) const;
 
             //! gaussian-assumption Average Shortfall (averaged shortfallness)
-            double gaussianAverageShortfall(double target) const  {
-                return rm_.averageShortfall(target,
-                    mean(), standardDeviation());
-            }
+            double gaussianAverageShortfall(double target) const;
+
+            //! access to the sample data accumulated so far
+            const std::vector<std::pair<double,double> >& sampleData() const {
+                return samples_; }
             //@}
 
             //! \name Modifiers
@@ -168,73 +155,46 @@ namespace QuantLib {
             //! resets the data to a null set
             void reset();
             //@}
-          protected:
-            Size sampleNumber_;
-            double sampleWeight_;
-            double sum_, quadraticSum_, downsideQuadraticSum_,
-                   cubicSum_, fourthPowerSum_;
-            double min_, max_;
+          private:
+            mutable std::vector<std::pair<double,double> > samples_;
             RiskMeasures rm_;
         };
 
-        // inline definitions
-
-        inline Size Statistics::samples() const {
-            return sampleNumber_;
+        /*! \pre weights must be positive or null */
+        inline void Statistics::add(double value, double weight) {
+          QL_REQUIRE(weight>=0.0,
+              "Statistics::add : negative weight not allowed");
+          samples_.push_back(std::make_pair(value,weight));
         }
 
-        inline double Statistics::weightSum() const {
-            return sampleWeight_;
+        inline void Statistics::reset() {
+            samples_ = std::vector<std::pair<double,double> >();
         }
 
-        inline double Statistics::mean() const {
-            QL_REQUIRE(sampleWeight_>0.0,
-                       "Statistics::mean() : "
-                       "sampleWeight_=0, unsufficient");
-            return sum_/sampleWeight_;
+
+        // RiskMeasures proxies
+        #define RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(METHOD) \
+        inline double Statistics::METHOD(double y) const { \
+            return rm_.METHOD(y, mean(), standardDeviation()); \
         }
+        RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(gaussianPercentile)
+        RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(gaussianPotentialUpside)
+        RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(gaussianValueAtRisk)
+        RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(gaussianExpectedShortfall)
+        RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(gaussianShortfall)
+        RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG(gaussianAverageShortfall)
+        #undef RISKMEASURE_PROXY_DOUBLE_RESULT_DOUBLE_ARG
 
-        inline double Statistics::standardDeviation() const {
-            return QL_SQRT(variance());
+        /*
+        #define RISKMEASURE_PROXY_DOUBLE_RESULT_ITERATOR_ARGS(METHOD) \
+        inline double Statistics::METHOD(double y) const { \
+            return rm_.METHOD(y, samples_.begin(), samples_.end()); \
         }
+        RISKMEASURE_PROXY_DOUBLE_RESULT_ITERATOR_ARGS(percentile)
+        #undef RISKMEASURE_PROXY_DOUBLE_RESULT_ITERATOR_ARGS
+        */
 
-        inline double Statistics::downsideDeviation() const {
-            return QL_SQRT(downsideVariance());
-        }
 
-        inline double Statistics::errorEstimate() const {
-            double var = variance();
-            QL_REQUIRE(samples() > 0,
-                       "Statistics::errorEstimate : "
-                       "zero samples are not sufficient");
-            return QL_SQRT(var/samples());
-        }
-
-        inline double Statistics::min() const {
-            QL_REQUIRE(sampleNumber_>0,
-                       "Statistics::min_() : "
-                       "empty sample");
-            return min_;
-        }
-
-        inline double Statistics::max() const {
-            QL_REQUIRE(sampleNumber_>0,
-                       "Statistics::max_() : "
-                       "empty sample");
-            return max_;
-        }
-
-        inline double Statistics::gaussianPercentile(double y) const {
-
-            QL_REQUIRE(y<1.0 && y>0.0,
-                "Statistics::percentile : percentile (" +
-                DoubleFormatter::toString(y) +
-                ") must be in (0%, 100%) extremes excluded");
-
-            Math::InverseCumulativeNormal gInverse(mean(),
-                standardDeviation());
-            return gInverse(y);
-        }
     }
 
 }
