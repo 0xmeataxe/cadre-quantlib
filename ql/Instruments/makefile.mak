@@ -17,9 +17,11 @@ BCC_INCLUDE    = $(MAKEDIR)\..\include
 OBJS = \
     asianoption.obj$(_D) \
     barrieroption.obj$(_D) \
+    basketoption.obj$(_D) \
     binarybarrieroption.obj$(_D) \
     capfloor.obj$(_D) \
     forwardvanillaoption.obj$(_D) \
+    multiassetoption.obj$(_D) \
     oneassetoption.obj$(_D) \
     oneassetstrikedoption.obj$(_D) \
     quantoforwardvanillaoption.obj$(_D) \
