@@ -18,7 +18,6 @@ BCC_LIBS       = $(MAKEDIR)\..\lib
 
 # Object files
 OBJS = capfloor.obj$(_D) \
-       europeanswaption.obj$(_D) \
        plainoption.obj$(_D) \
        simpleswap.obj$(_D) \
        stock.obj$(_D) \
