@@ -59,4 +59,5 @@
 %include Solvers1D.i
 %include TermStructures.i
 %include Statistics.i
+%include RandomGenerators.i
 
