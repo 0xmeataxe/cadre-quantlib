@@ -25,7 +25,6 @@
 
 class TermStructureTest : public CppUnit::TestFixture {
   public:
-    TermStructureTest();
     void setUp();
     void testImplied();
     void testImpliedObs();
