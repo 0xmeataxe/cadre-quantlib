@@ -20,6 +20,7 @@
 */
 
 #include <ql/PricingEngines/Vanilla/vanillaengines.hpp>
+#include <ql/PricingEngines/blackformula.hpp>
 
 namespace QuantLib {
 
@@ -38,92 +39,28 @@ namespace QuantLib {
         Handle<PlainVanillaPayoff> payoff = arguments_.payoff;
         #endif
 
-        double strike = payoff->strike();
         double variance = arguments_.volTS->blackVariance(arguments_.maturity,
-                                                          strike);
-        double stdDev = QL_SQRT(variance);
-        double vol = arguments_.volTS->blackVol(arguments_.maturity, strike);
-
+                                                          payoff->strike());
         DiscountFactor dividendDiscount =
             arguments_.dividendTS->discount(arguments_.maturity);
-        Rate dividendRate =
-            arguments_.dividendTS->zeroYield(arguments_.maturity);
-
         DiscountFactor riskFreeDiscount =
             arguments_.riskFreeTS->discount(arguments_.maturity);
-        Rate riskFreeRate =
-            arguments_.riskFreeTS->zeroYield(arguments_.maturity);
         double forwardPrice = arguments_.underlying *
             dividendDiscount / riskFreeDiscount;
 
-        double fD1, fD2, fderD1;
-        if (variance>0.0) {
-            if (strike==0.0) {
-                fderD1 = 0.0;
-                fD1 = 1.0;
-                fD2 = 1.0;
-            } else {
-                CumulativeNormalDistribution f;
-                double D1 = (QL_LOG(forwardPrice/strike) +
-                             0.5 * variance) / stdDev;
-                double D2 = D1-stdDev;
-                fD1 = f(D1);
-                fD2 = f(D2);
-                fderD1 = f.derivative(D1);
-            }
-        } else {
-            fderD1 = 0.0;
-            if (forwardPrice>strike) {
-                fD1 = 1.0;
-                fD2 = 1.0;
-            } else {
-                fD1 = 0.0;
-                fD2 = 0.0;
-            }
-        }
-
-        double alpha, beta, NID1;
-        switch (payoff->optionType()) {
-          case Option::Call:
-            alpha = fD1;
-            beta  = fD2;
-            NID1  = fderD1;
-            break;
-          case Option::Put:
-            alpha = fD1-1.0;
-            beta  = fD2-1.0;
-            NID1  = fderD1;
-            break;
-          case Option::Straddle:
-            alpha = 2.0*fD1-1.0;
-            beta  = 2.0*fD2-1.0;
-            NID1  = 2.0*fderD1;
-            break;
-          default:
-            throw IllegalArgumentError("AnalyticEuropeanEngine::calculate() : "
-                                       "invalid option type");
-        }
+        BlackFormula black(arguments_.underlying, forwardPrice, riskFreeDiscount,
+            variance, arguments_.maturity, payoff);
 
 
-        results_.value = riskFreeDiscount *
-            (forwardPrice * alpha - strike *  beta);
-        results_.delta = dividendDiscount * alpha;
-        // results_.deltaForward = riskFreeDiscount * alpha;
-        results_.gamma = (NID1==0.0 ? 0.0 : NID1* dividendDiscount /
-            (arguments_.underlying * stdDev));
-        results_.theta = riskFreeRate * results_.value
-            -(riskFreeRate - dividendRate)
-            * arguments_.underlying * results_.delta
-            - 0.5 * vol * vol * arguments_.underlying
-            * arguments_.underlying * results_.gamma;
-        results_.rho = arguments_.maturity * riskFreeDiscount *
-            strike * beta;
-        results_.dividendRho = - arguments_.maturity *
-            dividendDiscount * arguments_.underlying * alpha;
-        results_.vega = arguments_.underlying * NID1 *
-            dividendDiscount * QL_SQRT(arguments_.maturity);
-
-        results_.strikeSensitivity = - riskFreeDiscount * beta;
+        results_.value = black.value();
+        results_.delta = black.delta();
+        // results_.deltaForward = black.value();
+        results_.gamma = black.gamma();
+        results_.theta = black.theta();
+        results_.rho = black.rho();
+        results_.dividendRho = black.dividendRho();
+        results_.vega = black.vega();
+        results_.strikeSensitivity = black.strikeSensitivity();
     }
 
 }
