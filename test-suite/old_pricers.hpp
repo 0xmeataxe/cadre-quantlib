@@ -23,8 +23,8 @@
 
 class OldPricerTest {
   public:
-    static void testCliquetPricer();
 #ifndef QL_DISABLE_DEPRECATED
+    static void testCliquetPricer();
     static void testDividendEuropeanPricer();
 #endif
     static void testFdEuropeanPricer();
