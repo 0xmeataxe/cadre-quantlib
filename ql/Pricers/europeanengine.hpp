@@ -27,14 +27,14 @@
 #ifndef quantlib_european_engine_h
 #define quantlib_european_engine_h
 
-#include <ql/Instruments/plainoption.hpp>
+#include <ql/Pricers/vanillaoptionengine.hpp>
 
 namespace QuantLib {
 
     namespace Pricers {
 
         //! analytic pricing engine for European options
-        class EuropeanEngine : public PlainOptionEngine {
+        class EuropeanEngine : public VanillaOptionEngine {
           public:
         void calculate() const;
         };

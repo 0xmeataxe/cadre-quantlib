@@ -13,11 +13,11 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 */
-/*! \file binomialplainoption.hpp
+/*! \file binomialvanillaengine.hpp
     \brief Plain-option pricer using binomial methods 
 
     \fullpath
-    ql/Pricers/%binomialplainoption.hpp
+    ql/Pricers/%binomialvanillaengine.hpp
 */
 
 // $Id$
@@ -26,18 +26,19 @@
 #define quantlib_pricers_binomial_plain_option_h
 
 #include <ql/numericalmethod.hpp>
-#include <ql/Instruments/plainoption.hpp>
+//#include <ql/Instruments/vanillaoption.hpp>
+#include <ql/Pricers/vanillaoptionengine.hpp>
 
 namespace QuantLib {
 
     namespace Pricers {
 
         //! analytic pricing engine for European options
-        class BinomialPlainOption : public PlainOptionEngine {
+        class BinomialVanillaEngine : public VanillaOptionEngine {
           public:
             enum Type { CoxRossRubinstein, JarrowRudd, LeisenReimer };
 
-            BinomialPlainOption(Type type, Size steps)
+            BinomialVanillaEngine(Type type, Size steps)
             : type_(type), steps_(steps) {}
             void calculate() const;
           private:
@@ -45,11 +46,11 @@ namespace QuantLib {
             Size steps_;
         };
 
-        class DiscretizedPlainOption : public DiscretizedAsset {
+        class DiscretizedVanillaOption : public DiscretizedAsset {
           public:
-            DiscretizedPlainOption(
+            DiscretizedVanillaOption(
                 const Handle<NumericalMethod>& method, 
-                const Instruments::PlainOptionParameters& params)
+                const VanillaOptionParameters& params)
             : DiscretizedAsset(method), parameters_(params) {}
 
             void reset(Size size);
@@ -62,7 +63,7 @@ namespace QuantLib {
 
           private:
             void applySpecificCondition();
-            Instruments::PlainOptionParameters parameters_;
+            VanillaOptionParameters parameters_;
         };
 
 

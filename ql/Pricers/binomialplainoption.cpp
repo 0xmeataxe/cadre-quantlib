@@ -14,23 +14,23 @@
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 */
-/*! \file binomialplainoption.cpp
+/*! \file binomialvanillaengine.cpp
     \brief analytic pricing engine for European options
 
     \fullpath
-    ql/Pricers/%binomialplainoption.cpp
+    ql/Pricers/%binomialvanillaengine.cpp
 */
 
 // $Id$
 
-#include <ql/Pricers/binomialplainoption.hpp>
+#include <ql/Pricers/binomialvanillaengine.hpp>
 #include <ql/Lattices/bsmlattice.hpp>
 
 namespace QuantLib {
 
     namespace Pricers {
 
-        void BinomialPlainOption::calculate() const {
+        void BinomialVanillaEngine::calculate() const {
             double v = parameters_.volatility;
             Time t = parameters_.residualTime;
             Rate r = parameters_.riskFreeRate;
@@ -52,25 +52,25 @@ namespace QuantLib {
                 new Lattices::BlackScholesLattice(tree, r, t, steps_));
 
             Handle<DiscretizedAsset> option(
-            new DiscretizedPlainOption(lattice, parameters_));
+            new DiscretizedVanillaOption(lattice, parameters_));
 
             lattice->initialize(option, t);
             lattice->rollback(option, 0.0);
             results_.value = lattice->presentValue(option);
         }
 
-        void DiscretizedPlainOption::reset(Size size) {
+        void DiscretizedVanillaOption::reset(Size size) {
             values_ = Array(size, 0.0);
             adjustValues();
         }
 
-        void DiscretizedPlainOption::adjustValues() {
+        void DiscretizedVanillaOption::adjustValues() {
             if (isOnTime(parameters_.residualTime)) {
                 applySpecificCondition();
             }
         }
 
-        void DiscretizedPlainOption::applySpecificCondition() {
+        void DiscretizedVanillaOption::applySpecificCondition() {
             Handle<Lattices::BlackScholesLattice> lattice(method());
             QL_REQUIRE(!lattice.isNull(), 
                        "Must use a BlackScholes lattice");
