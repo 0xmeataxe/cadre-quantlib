@@ -30,6 +30,9 @@
 
 // $Source$
 // $Log$
+// Revision 1.7  2001/06/26 09:20:30  marmar
+// Method set price added to class stock
+//
 // Revision 1.6  2001/06/22 16:38:15  lballabio
 // Improved documentation
 //
@@ -40,8 +43,8 @@
 // smoothing #include xx.hpp and cutting old Log messages
 //
 
-#ifndef quantlib_stock_h
-#define quantlib_stock_h
+#ifndef quantlib_stock_hpp
+#define quantlib_stock_hpp
 
 #include "ql/instrument.hpp"
 
@@ -53,11 +56,8 @@ namespace QuantLib {
         class Stock : public Instrument {
           public:
             Stock(double price, const std::string& isinCode, 
-                const std::string& description)
-            : Instrument(isinCode,description) { 
-                NPV_ = price;
-                isExpired_ = false;
-            }
+                  const std::string& description);
+			void setPrice(double newPrice);
           protected:
             // NPV already set during construction
             void performCalculations() const {}
@@ -66,6 +66,5 @@ namespace QuantLib {
     }
 
 }
-
 
 #endif
