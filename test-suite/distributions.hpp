@@ -28,6 +28,9 @@ class DistributionTest {
   public:
     static void testNormal();
     static void testBivariate();
+    static void testPoisson();
+    static void testCumulativePoisson();
+    static void testInverseCumulativePoisson();
     static boost::unit_test_framework::test_suite* suite();
 };
 
