@@ -25,7 +25,7 @@ namespace QuantLib {
 
     void AnalyticAmericanBinaryBarrierEngine::calculate() const {
 
-        QL_REQUIRE(arguments_.exerciseType == Exercise::American,
+        QL_REQUIRE(arguments_.exercise->type() == Exercise::American,
                    "AnalyticAmericanBinaryBarrierEngine::calculate() : "
                    "not an American Option");
 
@@ -47,16 +47,16 @@ namespace QuantLib {
         double cashPayoff = arguments_.cashPayoff;
 
         double underlying = arguments_.underlying;
-        Time maturity = arguments_.maturity;
 
         double strike = payoff->strike();
-        double vol = arguments_.volTS->blackVol(arguments_.maturity, strike);
+        double vol = arguments_.volTS->blackVol(
+            arguments_.exercise->lastDate(), strike);
 
         Rate dividendRate =
-            arguments_.dividendTS->zeroYield(arguments_.maturity);
+            arguments_.dividendTS->zeroYield(arguments_.exercise->lastDate());
 
         Rate riskFreeRate =
-            arguments_.riskFreeTS->zeroYield(arguments_.maturity);
+            arguments_.riskFreeTS->zeroYield(arguments_.exercise->lastDate());
 
         double vol2 = vol*vol;
         double b_temp = riskFreeRate - dividendRate - 0.5*vol2;
@@ -66,6 +66,9 @@ namespace QuantLib {
         double lambda = QL_SQRT(mu*mu+2*(riskFreeRate-dividendRate)/vol2);
         double l_plus = mu + lambda;
         double l_minus = mu - lambda;
+        Time maturity = arguments_.riskFreeTS->dayCounter().yearFraction(
+            arguments_.riskFreeTS->referenceDate(),
+            arguments_.exercise->lastDate());
         double root_tau = QL_SQRT (maturity);
         double root_two_pi = M_SQRT2 * M_SQRTPI;
         double log_H_S = QL_LOG (barrier/underlying);
