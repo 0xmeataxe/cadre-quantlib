@@ -1,6 +1,6 @@
 
 /*
- Copyright (C) 2003 StatPro Italia srl
+ Copyright (C) 2003, 2004 StatPro Italia srl
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -21,23 +21,12 @@
 #include <ql/qldefines.hpp>
 #include <ql/PricingEngines/core.hpp>
 
-#include <ql/PricingEngines/Asian/asianengines.hpp>
-
-#include <ql/PricingEngines/Barrier/barrierengines.hpp>
-#include <ql/PricingEngines/Barrier/binarybarrierengines.hpp>
-
-#include <ql/PricingEngines/Cliquet/cliquetengines.hpp>
-
-#include <ql/PricingEngines/Forward/forwardengines.hpp>
-
-#include <ql/PricingEngines/Quanto/quantoengines.hpp>
-
-#include <ql/PricingEngines/Vanilla/americanmcengines.hpp>
-#include <ql/PricingEngines/Vanilla/discretizedvanillaoption.hpp>
-#include <ql/PricingEngines/Vanilla/mcdigitalengine.hpp>
-#include <ql/PricingEngines/Vanilla/mceuropeanengine.hpp>
-#include <ql/PricingEngines/Vanilla/mcvanillaengine.hpp>
-#include <ql/PricingEngines/Vanilla/vanillaengines.hpp>
+#include <ql/PricingEngines/Asian/all.hpp>
+#include <ql/PricingEngines/Barrier/all.hpp>
+#include <ql/PricingEngines/Cliquet/all.hpp>
+#include <ql/PricingEngines/Forward/all.hpp>
+#include <ql/PricingEngines/Quanto/all.hpp>
+#include <ql/PricingEngines/Vanilla/all.hpp>
 
 
 #endif
