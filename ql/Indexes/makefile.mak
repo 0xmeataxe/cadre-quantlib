@@ -23,6 +23,7 @@ INCLUDE_DIR    = ..\..
 
 # Object files
 OBJS = \
+    "indexmanager.obj$(_mt)$(_D)" \
     "xibor.obj$(_mt)$(_D)" \
     "xibormanager.obj$(_mt)$(_D)"
 
