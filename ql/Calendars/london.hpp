@@ -41,7 +41,8 @@ namespace QuantLib {
         <li>Boxing Day, December 26th (possibly moved to Monday or
             Tuesday)</li>
         </ul>
-        See http://www.dti.gov.uk/er/bankhol.htm
+
+        Data from http://www.dti.gov.uk/er/bankhol.htm
 
         \ingroup calendars
     */
