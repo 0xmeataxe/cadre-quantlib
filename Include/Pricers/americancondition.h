@@ -28,6 +28,14 @@
     $Source$
     $Name$
     $Log$
+    Revision 1.9  2001/03/02 08:36:44  enri
+    Shout options added:
+    	* BSMAmericanOption is now AmericanOption, same interface
+    	* ShoutOption added
+    	* both ShoutOption and AmericanOption inherit from
+    	  StepConditionOption
+    offline.doxy.linux added.
+
     Revision 1.8  2001/03/01 13:56:44  marmar
     Methods are now inlined explicitly
 
@@ -57,26 +65,24 @@ namespace QuantLib {
 
     namespace Pricers {
 
-        class BSMAmericanCondition : 
-                public FiniteDifferences::StandardStepCondition {
-          public:
-            BSMAmericanCondition(const Array& initialPrices);
+        class AmericanCondition : 
+            public FiniteDifferences::StandardStepCondition {
+        public:
+            AmericanCondition(const Array& initialPrices);
             void applyTo(Array& a, Time t) const;
-          private:
+        private:
             Array initialPrices_;
         };
 
-        inline BSMAmericanCondition::BSMAmericanCondition(
-                    const Array& initialPrices) 
+        inline AmericanCondition::AmericanCondition(
+            const Array& initialPrices) 
             : initialPrices_(initialPrices) {}
             
-        inline void BSMAmericanCondition::applyTo(Array& a, Time t) const {
-                for (int i = 0; i < a.size(); i++)
-                    a[i] = QL_MAX(a[i], initialPrices_[i]);
-            }
-
+        inline void AmericanCondition::applyTo(Array& a, Time t) const {
+            for (int i = 0; i < a.size(); i++)
+                a[i] = QL_MAX(a[i], initialPrices_[i]);
+        }
     }
-
 }
 
 #endif
