@@ -31,20 +31,22 @@
 
 // $Id$
 
-#include "ql/handle.hpp"
-#include "ql/Pricers/mcpagoda.hpp"
-#include "ql/MonteCarlo/pagodapathpricer.hpp"
-#include "ql/MonteCarlo/mctypedefs.hpp"
+#include <ql/handle.hpp>
+#include <ql/Pricers/mcpagoda.hpp>
+#include <ql/MonteCarlo/pagodapathpricer.hpp>
+#include <ql/MonteCarlo/mctypedefs.hpp>
 
 namespace QuantLib {
 
     namespace Pricers {
 
-        using MonteCarlo::MultiPathPricer;
-        using MonteCarlo::GaussianMultiPathGenerator;
-        using MonteCarlo::PagodaPathPricer;
-        using MonteCarlo::MultiFactorMonteCarloOption;
+        using Math::Statistics;
         using Math::Matrix;
+        using MonteCarlo::MultiPath;
+        using MonteCarlo::GaussianMultiPathGenerator;
+        using MonteCarlo::PathPricer;
+        using MonteCarlo::MonteCarloModel;
+        using MonteCarlo::PagodaPathPricer;
 
         McPagoda::McPagoda(const Array& portfolio, double fraction,
             double roof, const Array& dividendYield, const Matrix& covariance,
@@ -78,14 +80,14 @@ namespace QuantLib {
             double residualTime = times[times.size()-1];
 
             //! Initialize the pricer on the path pricer
-            Handle<MultiPathPricer> pathPricer(
+            Handle<PathPricer<MultiPath> > pathPricer(
                 new PagodaPathPricer(portfolio, roof,
                         fraction * QL_EXP(-riskFreeRate*residualTime),
                         antitheticVariance));
 
              //! Initialize the multi-factor Monte Carlo
-            mcModel_ = Handle<MonteCarlo::MonteCarloModel<Math::Statistics, MonteCarlo::GaussianMultiPathGenerator, MonteCarlo::MultiPathPricer> > (
-                new MonteCarlo::MonteCarloModel<Math::Statistics, MonteCarlo::GaussianMultiPathGenerator, MonteCarlo::MultiPathPricer> (
+            mcModel_ = Handle<MonteCarlo::MonteCarloModel<Math::Statistics, MonteCarlo::GaussianMultiPathGenerator, MonteCarlo::PathPricer<MultiPath> > > (
+                new MonteCarlo::MonteCarloModel<Math::Statistics, MonteCarlo::GaussianMultiPathGenerator, MonteCarlo::PathPricer<MultiPath> > (
                                         pathGenerator, pathPricer,
                                         Math::Statistics()));
 

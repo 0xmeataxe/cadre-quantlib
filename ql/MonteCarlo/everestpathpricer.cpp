@@ -32,34 +32,29 @@
 
 // $Id$
 
-#include "ql/MonteCarlo/everestpathpricer.hpp"
-#include "ql/dataformatters.hpp"
+#include <ql/MonteCarlo/everestpathpricer.hpp>
+#include <ql/dataformatters.hpp>
 
 namespace QuantLib {
 
     namespace MonteCarlo {
 
-        EverestPathPricer::EverestPathPricer(double discount,
-            bool antitheticVariance)
-        : discount_(discount), antitheticVariance_(antitheticVariance) {
-            QL_REQUIRE(discount_ > 0.0,
-                "EverestPathPricer: discount must be positive");
-            isInitialized_ = true;
-        }
+        EverestPathPricer::EverestPathPricer(DiscountFactor discount,
+            bool useAntitheticVariance)
+        : PathPricer<MultiPath>(discount, useAntitheticVariance) {}
 
 
         double EverestPathPricer::operator()(const MultiPath& multiPath) const {
             size_t numAssets = multiPath.assetNumber();
             size_t numSteps = multiPath.pathSize();
-            QL_REQUIRE(isInitialized_,
-                "EverestPathPricer: pricer not initialized");
 
             double log_drift, log_diffusion;
-            if (antitheticVariance_) {
+            size_t i,j;
+            if (useAntitheticVariance_) {
                 double minPrice = QL_MAX_DOUBLE, minPrice2 = QL_MAX_DOUBLE;
-                for(size_t j = 0; j < numAssets; j++) {
+                for( j = 0; j < numAssets; j++) {
                     log_drift = log_diffusion = 0.0;
-                    for(size_t i = 0; i < numSteps; i++) {
+                    for( i = 0; i < numSteps; i++) {
                         log_drift += multiPath[j].drift()[i];
                         log_diffusion += multiPath[j].diffusion()[i];
                     }
@@ -70,9 +65,9 @@ namespace QuantLib {
                 return discount_ * 0.5 * (minPrice+minPrice2);
             } else {
                 double minPrice = QL_MAX_DOUBLE;
-                for(size_t j = 0; j < numAssets; j++) {
+                for( j = 0; j < numAssets; j++) {
                     log_drift = log_diffusion = 0.0;
-                    for(size_t i = 0; i < numSteps; i++) {
+                    for( i = 0; i < numSteps; i++) {
                         log_drift += multiPath[j].drift()[i];
                         log_diffusion += multiPath[j].diffusion()[i];
                     }
