@@ -21,8 +21,8 @@
  * QuantLib license is also available at http://quantlib.sourceforge.net/LICENSE.TXT
 */
 
-#ifndef quantlib_PCF_Deposit_curve_h
-#define quantlib_PCF_Deposit_curve_h
+#ifndef quantlib_piecewise_constant_forward_curve_h
+#define quantlib_piecewise_constant_forward_curve_h
 
 #include "qldefines.h"
 #include "termstructure.h"
@@ -56,7 +56,6 @@ namespace QuantLib {
 			Rate forward(const Date&) const;
 		  private:
 			// methods
-			Time timeFromSettlement(const Date& d) const;
 			int nextNode(const Date& d) const;
 			// data members
 			Handle<Currency> theCurrency;
@@ -103,10 +102,6 @@ namespace QuantLib {
 			return settlementDate();
 		}
 		
-		inline Time PiecewiseConstantForwards::timeFromSettlement(const Date& d) const {
-			return theDayCounter->yearFraction(settlementDate(),d);
-		}
-	
 	}
 
 }
