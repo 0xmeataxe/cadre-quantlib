@@ -1,5 +1,3 @@
-
-
 /*
  Copyright (C) 2001, 2002 Nicolas Di Césaré
 
@@ -52,7 +50,7 @@ namespace QuantLib {
             virtual ~ConjugateGradient() {}
 
             //! minimize the optimization problem P
-            virtual void Minimize(OptimizationProblem& P);
+            virtual void minimize(OptimizationProblem& P);
           private:
             //! line search
             Handle<LineSearch> lineSearch_;
