@@ -29,7 +29,7 @@
 
 #include <ql/Indexes/xibor.hpp>
 #include <ql/Calendars/tokyo.hpp>
-#include <ql/DayCounters/actual365.hpp>
+#include <ql/DayCounters/actual360.hpp>
 
 namespace QuantLib {
 
@@ -42,7 +42,7 @@ namespace QuantLib {
                 const RelinkableHandle<TermStructure>& h)
             : Xibor("JPYLibor", n, units, 2, JPY,
                 Calendar(Calendars::Tokyo()), true, ModifiedFollowing,
-                DayCounter(DayCounters::Actual365()), h) {}
+                DayCounter(DayCounters::Actual360()), h) {}
         };
 
     }

@@ -57,7 +57,7 @@ namespace QuantLib {
                 // Queen's Birthday, first Monday in June
                 || (d <= 7 && w == Monday && m == June)
                 // Labour Day, fourth Monday in October
-                || ((d <= 22 && d >= 28) && w == Monday && m == October)
+                || ((d >= 22 && d <= 28) && w == Monday && m == October)
                 // Christmas, December 25th (possibly Monday or Tuesday)
                 || ((d == 25 || (d == 27 && (w == Monday || w == Tuesday)))
                     && m == December)
