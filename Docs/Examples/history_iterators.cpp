@@ -22,46 +22,31 @@
  * available at http://quantlib.sourceforge.net/Authors.txt
 */
 
-/*
-    $Id$
-    $Source$
-    $Log$
-    Revision 1.1  2001/06/22 14:54:48  nando
-    doxygen example file moved under Docs/Examples
+// print out the mean value and its standard deviation.
 
-    Revision 1.5  2001/04/10 14:51:51  lballabio
-    Added Microsoft Help format to Doxygen output
+Statistics s;
+s.addSequence(h.vdbegin(),h.vdend());
+cout << "Historical mean: " << s.mean() << endl;
+cout << "Std. deviation:  " << s.standardDeviation() << endl;
 
-    Revision 1.4  2001/04/06 18:46:19  nando
-    changed Authors, Contributors, Licence and copyright header
+// Another possibility: print out the maximum value.
 
-*/
-    // print out the mean value and its standard deviation.
+History::const_valid_iterator max = h.vbegin(), i=max, end = h.vend();
+for (i++; i!=end; i++)
+    if (i->value() > max->value())
+        max = i;
+cout << "Maximum value: " << max->value()
+     << " assumed " << DateFormatter::toString(max->date()) << endl;
 
-    Statistics s;
-    s.addSequence(h.vdbegin(),h.vdend());
-    cout << "Historical mean: " << s.mean() << endl;
-    cout << "Std. deviation:  " << s.standardDeviation() << endl;
+// or the minimum, this time the STL way:
 
-    // Another possibility: print out the maximum value.
-
-    History::const_valid_iterator max = h.vbegin(), i=max, end = h.vend();
-    for (i++; i!=end; i++)
-        if (i->value() > max->value())
-            max = i;
-    cout << "Maximum value: " << max->value()
-         << " assumed " << DateFormatter::toString(max->date()) << endl;
-
-    // or the minimum, this time the STL way:
-
-    bool lessthan(const History::Entry& i, const History::Entry& j) {
-        return i.value() < j.value();
-    }
-
-    History::const_valid_iterator min =
-        std::min_element(h.vbegin(),h.vend(),lessthan);
-    cout << "Minimum value: " << min->value()
-         << " assumed " << DateFormatter::toString(min->date()) << endl;
-
+bool lessthan(const History::Entry& i, const History::Entry& j) {
+    return i.value() < j.value();
 }
+
+History::const_valid_iterator min =
+    std::min_element(h.vbegin(),h.vend(),lessthan);
+cout << "Minimum value: " << min->value()
+     << " assumed " << DateFormatter::toString(min->date()) << endl;
+
     
