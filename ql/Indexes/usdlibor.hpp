@@ -33,6 +33,10 @@
 namespace QuantLib {
 
     //! %USD %LIBOR rate
+    /*! US Dollar LIBOR fixed by BBA.
+
+        See <http://www.bba.org.uk/bba/jsp/polopoly.jsp?d=225&a=1414>.
+    */
     class USDLibor : public Libor {
       public:
         USDLibor(Integer n, TimeUnit units,
