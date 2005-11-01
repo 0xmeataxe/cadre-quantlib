@@ -21,6 +21,7 @@
 #include "utilities.hpp"
 #include <ql/Math/sampledcurve.hpp>
 #include <ql/Utilities/dataformatters.hpp>
+#include <ql/grid.hpp>
 
 using namespace QuantLib;
 using namespace boost::unit_test_framework;
@@ -35,9 +36,8 @@ void SampledCurveTest::testConstruction() {
     BOOST_MESSAGE("Testing sampled curve construction...");
 
     QL_TEST_BEGIN
-    SampledCurve curve(100);
+        SampledCurve curve(BoundedGrid(-10.0,10.0,100));
     FSquared f2;
-    curve.setLinearSpacing(-10.0,10.0);
     curve.sample(f2);
     Real expected = 100.0;
     if (std::fabs(curve.value(0) - expected) > 1e-5) {
