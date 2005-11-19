@@ -25,6 +25,7 @@
 #define quantlib_cash_flow_hpp
 
 #include <ql/date.hpp>
+#include <ql/event.hpp>
 #include <ql/Patterns/observable.hpp>
 #include <ql/Patterns/visitor.hpp>
 
@@ -34,7 +35,7 @@ namespace QuantLib {
     /*! This class is purely virtual and acts as a base class for the actual
         cash flow implementations.
     */
-    class CashFlow : public Observable {
+    class CashFlow : public Event {
       public:
         virtual ~CashFlow() {}
         //! \name CashFlow interface
@@ -44,7 +45,7 @@ namespace QuantLib {
                   amount paid at the cash flow date.
         */
         virtual Real amount() const = 0;
-        //! returns the date at which the cash flow is settled
+        //! \note This is inheirited from the event class
         virtual Date date() const = 0;
         //@}
         //! \name Visitability
