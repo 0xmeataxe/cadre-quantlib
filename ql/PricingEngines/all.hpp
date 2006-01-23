@@ -36,6 +36,7 @@
 #include <ql/PricingEngines/Quanto/all.hpp>
 #include <ql/PricingEngines/Swaption/all.hpp>
 #include <ql/PricingEngines/Vanilla/all.hpp>
+#include <ql/PricingEngines/Hybrid/all.hpp>
 
 
 #endif
