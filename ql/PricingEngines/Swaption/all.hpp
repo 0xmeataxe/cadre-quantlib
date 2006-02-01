@@ -24,6 +24,7 @@
 #include <ql/PricingEngines/Swaption/g2swaptionengine.hpp>
 #include <ql/PricingEngines/Swaption/jamshidianswaptionengine.hpp>
 #include <ql/PricingEngines/Swaption/discretizedswaption.hpp>
+#include <ql/PricingEngines/Swaption/lfmswaptionengine.hpp>
 #include <ql/PricingEngines/Swaption/treeswaptionengine.hpp>
 
 #endif
