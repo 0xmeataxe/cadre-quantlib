@@ -26,7 +26,9 @@
 #include <ql/Optimization/armijo.hpp>
 #include <ql/Optimization/conjugategradient.hpp>
 #include <ql/Optimization/leastsquare.hpp>
+#include <ql/Optimization/levenbergmarquardt.hpp>
 #include <ql/Optimization/linesearch.hpp>
+#include <ql/Optimization/lmdif.hpp>
 #include <ql/Optimization/simplex.hpp>
 #include <ql/Optimization/steepestdescent.hpp>
 
