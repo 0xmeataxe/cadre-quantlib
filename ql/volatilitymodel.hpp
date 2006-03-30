@@ -27,9 +27,11 @@
 
 #include <vector>
 #include <ql/types.hpp>
+#include <ql/timeseries.hpp>
 
 namespace QuantLib {
-    const QuoteTimeSeries;
+    class Date;
+    class DayCounter;
 
     /*! This abstract class defines the interface of concrete
         volatility model
@@ -38,9 +40,10 @@ namespace QuantLib {
     */
     class VolatilityModel {
       public:
-        TimeSeries<Volatility>
-        calculate(const QuoteTimeSeries &) = 0;
-        void calibrate(const QuoteTimeSeries &) = 0;
+        virtual ~VolatilityModel() {};
+        virtual TimeSeries<Volatility>
+        calculate(const TimeSeries<Real> &quoteSeries) = 0;
+        virtual void calibrate(const TimeSeries<Real> &quoteSeries) = 0;
     };
 }
 
