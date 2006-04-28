@@ -24,7 +24,10 @@
 
 #include <ql/Processes/blackscholesprocess.hpp>
 #include <ql/Processes/eulerdiscretization.hpp>
+#include <ql/Processes/forwardmeasureprocess.hpp>
+#include <ql/Processes/g2process.hpp>
 #include <ql/Processes/geometricbrownianprocess.hpp>
+#include <ql/Processes/hullwhiteprocess.hpp>
 #include <ql/Processes/lfmprocess.hpp>
 #include <ql/Processes/lfmcovarparam.hpp>
 #include <ql/Processes/lfmhullwhiteparam.hpp>
