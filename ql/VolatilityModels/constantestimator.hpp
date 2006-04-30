@@ -33,7 +33,7 @@ namespace QuantLib {
 
         Volatilities are assumed to be expressed on an annual basis.
     */
-    class ConstantEstimator : public VolatilityModel {
+    class ConstantEstimator : public VolatilityCompositor {
       private:
         Size size_;
         Time yearFraction_;
@@ -41,8 +41,8 @@ namespace QuantLib {
         ConstantEstimator(Size size, Time yearFraction)
         : size_(size), yearFraction_(yearFraction) {}
         TimeSeries<Volatility>
-        calculate(const TimeSeries<Real> &quoteSeries);
-        void calibrate(const TimeSeries<Real> &quoteSeries) {}
+        calculate(const TimeSeries<Volatility> &volatilitySeries);
+        void calibrate(const TimeSeries<Volatility> &volatilitySeries) {}
     };
 
 }
