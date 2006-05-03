@@ -25,7 +25,7 @@
 #define quantlib_cdor_hpp
 
 #include <ql/Indexes/xibor.hpp>
-#include <ql/Calendars/toronto.hpp>
+#include <ql/Calendars/canada.hpp>
 #include <ql/DayCounters/actual360.hpp>
 #include <ql/Currencies/america.hpp>
 
