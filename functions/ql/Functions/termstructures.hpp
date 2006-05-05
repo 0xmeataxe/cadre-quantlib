@@ -20,7 +20,7 @@
 #ifndef quantlib_functions_termstructures_h
 #define quantlib_functions_termstructures_h
 
-#include <ql/ratehelper.hpp>
+#include <ql/TermStructures/piecewiseyieldcurve.hpp>
 
 namespace QuantLib {
 
