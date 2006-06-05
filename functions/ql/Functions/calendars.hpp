@@ -21,7 +21,6 @@
 #define quantlib_functions_calendar_h
 
 #include <ql/calendar.hpp>
-#include <ql/daycounter.hpp>
 #include <ql/settings.hpp>
 #include <vector>
 
@@ -33,42 +32,17 @@ namespace QuantLib {
         return evalDate;
     }
 
-    /* soon to be deprecated/removed */
-    inline std::vector<Date> holidayList(const Calendar& calendar,
+    #ifndef QL_DISABLE_DEPRECATED
+    /*! Returns the holidays between two dates
+        \deprecated use Calendar::holidayList instead
+    */
+    std::vector<Date> holidayList(const Calendar& calendar,
                                   const Date& from,
                                   const Date& to,
-                                  bool includeWeekEnds = false) {
-        return Calendar::holidayList(calendar, from, to, includeWeekEnds);
-    }
+                                  bool includeWeekEnds = false);
 
-    /*! return the advanced date over a given calendar
-    */
-    inline Date advanceCalendar(
-            const Date &startDate,
-            const long &n,
-            const TimeUnit &timeUnits,
-            const Calendar &calendar,
-            const BusinessDayConvention &convention) {
-        return calendar.advance(startDate,
-                                n,
-                                timeUnits,
-                                convention);
-    }
-
-    /* soon to be deprecated/removed */
-    inline bool isHoliday(const Calendar &calendar,
-                          const Date &date) {
-        return calendar.isHoliday(date);
-    }
-
-    /* soon to be deprecated/removed */
-    inline bool isEndOfMonth(const Calendar &calendar,
-                             const Date &date) {
-        return calendar.isEndOfMonth(date);
-    }
-
-
+    #endif
 }
 
-#endif
 
+#endif
