@@ -23,6 +23,8 @@
 #include <ql/qldefines.hpp>
 #include <ql/PricingEngines/Forward/forwardengine.hpp>
 #include <ql/PricingEngines/Forward/forwardperformanceengine.hpp>
+#include <ql/PricingEngines/Forward/mcvarianceswapengine.hpp>
+#include <ql/PricingEngines/Forward/replicatingvarianceswapengine.hpp>
 
 
 #endif
