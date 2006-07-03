@@ -34,9 +34,11 @@ namespace QuantLib {
 
         virtual ~PseudoRoot();
 
-        virtual const Matrix& pseudoRoot(Size i) const=0;
-        virtual Size numberOfRates() const=0;
-        virtual Size numberOfFactors() const=0;
+        virtual const Array& initialRates() const = 0;
+        virtual const Array& displacements() const = 0;
+        virtual const Matrix& pseudoRoot(Size i) const = 0;
+        virtual Size numberOfRates() const = 0;
+        virtual Size numberOfFactors() const = 0;
 
     };
 
