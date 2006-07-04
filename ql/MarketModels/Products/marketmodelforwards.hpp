@@ -52,8 +52,8 @@ namespace QuantLib {
     private:
             Array rateTimes_;
             Array accruals_;
-            Array paymentTimes;
-            Array strikes;
+            Array paymentTimes_;
+            Array strikes_;
             // things that vary in a path
             Size currentIndex_;
     };

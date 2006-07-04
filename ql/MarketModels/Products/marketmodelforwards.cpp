@@ -21,4 +21,65 @@
 
 namespace QuantLib {
 
+    MarketModelForwards::MarketModelForwards(const Array& rateTimes,
+                        const Array& accruals,
+                        const Array& paymentTimes,
+                        const Array& strikes)
+                        : rateTimes_(rateTimes), accruals_(accruals), 
+                        paymentTimes_(paymentTimes), strikes_(strikes)
+    {
+    }
+
+    MarketModelForwards::~MarketModelForwards(){};
+    EvolutionDescription MarketModelForwards::suggestedEvolution() const
+    {
+         Array evolutionTimes(rateTimes_.size()-1);
+        for (Size i = 0; i<evolutionTimes.size(); ++i)
+            evolutionTimes[i]=rateTimes_[i];
+
+        // terminal measure
+        std::vector<Size> numeraires(evolutionTimes.size(),
+                                     rateTimes_.size()-1);
+
+        std::vector<std::pair<Size,Size> > relevanceRates(
+            evolutionTimes.size());
+        for (Size i =0; i < evolutionTimes.size(); ++i)
+            relevanceRates[i] = std::make_pair(i,i+1);
+
+
+         return EvolutionDescription(rateTimes_, evolutionTimes,
+                                     numeraires, relevanceRates);
+    }    
+
+    Array MarketModelForwards::possibleCashFlowTimes() const 
+    {
+      return paymentTimes_;
+    }
+      Size MarketModelForwards::numberOfProducts() const
+    {
+        return strikes_.size();    
+    }
+       Size MarketModelForwards::maxNumberOfCashFlowsPerProductPerStep() const
+    {
+        return 1;
+    }
+      void MarketModelForwards::reset()
+    {
+       currentIndex_=0;
+    }
+
+    bool MarketModelForwards::nextTimeStep(
+        const CurveState& currentState, 
+        std::vector<Size>& numberCashFlowsThisStep, 
+        std::vector<std::vector<MarketModelProduct::CashFlow> >& genCashFlows)
+    {
+        double liborRate = currentState.forwardRate(currentIndex_);
+        genCashFlows[currentIndex_][0].timeIndex = currentIndex_;
+        genCashFlows[currentIndex_][0].amount = (liborRate-strikes_[currentIndex_])*accruals_[currentIndex_];
+        std::fill(numberCashFlowsThisStep.begin(),numberCashFlowsThisStep.end(),0);
+        numberCashFlowsThisStep[currentIndex_] = 1;
+       ++currentIndex_;
+       return (currentIndex_ == strikes_.size());
+    }
+
 }
