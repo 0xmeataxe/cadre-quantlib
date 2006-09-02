@@ -25,6 +25,8 @@
 
 #include <ql/MonteCarlo/brownianbridge.hpp>
 #include <ql/MonteCarlo/getcovariance.hpp>
+#include <ql/MonteCarlo/longstaffschwartzpathpricer.hpp>
+#include <ql/MonteCarlo/lsmbasissystem.hpp>
 
 
 #endif
