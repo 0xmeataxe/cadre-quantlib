@@ -22,18 +22,20 @@
 #define quantlib_market_model_evolver_hpp
 
 #include <ql/MarketModels/curvestate.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace QuantLib {
 
+    class EvolutionDescription;
+    
     class MarketModelEvolver {
       public:
         virtual ~MarketModelEvolver() {}
         
-        virtual Real startNewPath()=0;
-        virtual Real advanceStep()=0;
-        virtual Size currentStep() const=0;
-        virtual const CurveState& currentState() const=0;
+        virtual EvolutionDescription evolution() const = 0;
+        virtual Real startNewPath() = 0;
+        virtual Real advanceStep() = 0;
+        virtual Size currentStep() const = 0;
+        virtual const CurveState& currentState() const = 0;
     };
 
 }
