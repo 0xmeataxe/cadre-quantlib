@@ -23,6 +23,7 @@
 
 #include <ql/MarketModels/curvestate.hpp>
 #include <ql/MarketModels/evolutiondescription.hpp>
+#include <ql/MarketModels/marketmodelproduct.hpp>
 
 namespace QuantLib {
 
