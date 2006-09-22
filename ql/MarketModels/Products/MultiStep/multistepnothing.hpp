@@ -24,6 +24,7 @@
 #include <ql/MarketModels/Products/multiproductmultistep.hpp>
 
 namespace QuantLib {
+
     class MultiStepNothing : public MultiProductMultiStep {
       public:
         MultiStepNothing(const EvolutionDescription& evolution,
@@ -33,7 +34,6 @@ namespace QuantLib {
         //@{
         std::vector<Time> possibleCashFlowTimes() const;
         Size numberOfProducts() const;
-        EvolutionDescription suggestedEvolution() const;
         Size maxNumberOfCashFlowsPerProductPerStep() const;
         void reset(); 
         bool nextTimeStep(const CurveState&, 
@@ -41,7 +41,6 @@ namespace QuantLib {
                           std::vector<std::vector<CashFlow> >&);
         //@}
       private:
-        EvolutionDescription evolution_;
         Size numberOfProducts_, doneIndex_;
         // things that vary in a path
         Size currentIndex_;
@@ -56,10 +55,6 @@ namespace QuantLib {
 
     inline Size MultiStepNothing::numberOfProducts() const {
         return numberOfProducts_;
-    }
-
-    inline EvolutionDescription MultiStepNothing::suggestedEvolution() const {
-        return evolution_;
     }
 
     inline Size

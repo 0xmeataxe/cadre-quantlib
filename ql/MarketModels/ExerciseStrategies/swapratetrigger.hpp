@@ -29,7 +29,8 @@ namespace QuantLib {
 
     class SwapRateTrigger : public ExerciseStrategy<CurveState> {
       public:
-        SwapRateTrigger(const std::vector<Rate>& swapTriggers,
+        SwapRateTrigger(const std::vector<Time>& rateTimes,
+                        const std::vector<Rate>& swapTriggers,
                         const std::vector<Time>& exerciseTimes);
         std::vector<Time> exerciseTimes() const;
         std::vector<Time> relevantTimes() const;
@@ -37,9 +38,11 @@ namespace QuantLib {
         bool exercise(const CurveState& currentState) const;
         void nextStep(const CurveState& currentState);
       private:
+        std::vector<Time> rateTimes_;
         std::vector<Rate> swapTriggers_;
         std::vector<Time> exerciseTimes_;
         Size currentIndex_;
+        std::vector<Size> rateIndex_;
     };
 
 }
