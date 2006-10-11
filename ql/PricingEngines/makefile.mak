@@ -28,6 +28,7 @@ OBJS = \
     "americanpayoffatexpiry.obj$(_mt)$(_D)" \
     "americanpayoffathit.obj$(_mt)$(_D)" \
     "blackformula.obj$(_mt)$(_D)" \
+    "blackmodel.obj$(_mt)$(_D)" \
     "greeks.obj$(_mt)$(_D)" \
     "Asian\AsianEngines$(_mt)$(_D).lib" \
     "Barrier\BarrierEngines$(_mt)$(_D).lib" \

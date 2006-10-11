@@ -27,8 +27,9 @@ OBJS = \
     "blackvariancesurface.obj$(_mt)$(_D)" \
     "cmsmarket.obj$(_mt)$(_D)" \
     "localvolsurface.obj$(_mt)$(_D)" \
+    "smilesection.obj$(_mt)$(_D)" \
     "swaptionvolcube.obj$(_mt)$(_D)" \
-    "swaptionvolcubebysabbr.obj$(_mt)$(_D)" \
+    "swaptionvolcubebysabr.obj$(_mt)$(_D)" \
     "swaptionvolmatrix.obj$(_mt)$(_D)"
 
 # Tools to be used
