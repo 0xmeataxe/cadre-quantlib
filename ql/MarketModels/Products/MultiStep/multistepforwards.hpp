@@ -18,8 +18,8 @@
 */
 
 
-#ifndef quantlib_market_model_forwards_hpp
-#define quantlib_market_model_forwards_hpp
+#ifndef quantlib_multistep_forwards_hpp
+#define quantlib_multistep_forwards_hpp
 
 #include <ql/MarketModels/Products/multiproductmultistep.hpp>
 
