@@ -21,18 +21,9 @@
 #ifndef quantlib_generic_longstaff_schwartz_hpp
 #define quantlib_generic_longstaff_schwartz_hpp
 
-#include <ql/types.hpp>
-#include <vector>
+#include <ql/MonteCarlo/nodedata.hpp>
 
 namespace QuantLib {
-
-    struct LSNodeData {
-        Real exerciseValue;
-        Real cumulatedCashFlows;
-        std::vector<Real> basisFunctionValues;
-        Real controlValue;
-        bool isValid;
-    };
 
     //! returns the biased estimate obtained while regressing
     /* TODO document:
@@ -45,7 +36,7 @@ namespace QuantLib {
        basisCoefficients.size() = n
     */
     Real genericLongstaffSchwartzRegression(
-        std::vector<std::vector<LSNodeData> >& simulationData,
+        std::vector<std::vector<NodeData> >& simulationData,
         std::vector<std::vector<Real> >& basisCoefficients);
 
 }

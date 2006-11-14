@@ -21,22 +21,21 @@
 #ifndef quantlib_longstaff_schwartz_data_collector_hpp
 #define quantlib_longstaff_schwartz_data_collector_hpp
 
-#include <ql/MonteCarlo/genericlsregression.hpp>
+#include <ql/MonteCarlo/nodedata.hpp>
 #include <ql/MarketModels/marketmodelproduct.hpp>
 #include <ql/MarketModels/marketmodelevolver.hpp>
-#include <ql/MarketModels/lsbasisfunctions.hpp>
+#include <ql/MarketModels/nodedataprovider.hpp>
 #include <ql/MarketModels/exercisevalue.hpp>
 
 namespace QuantLib {
 
-    void collectLongstaffSchwartzData(
-                      MarketModelEvolver& evolver,
-                      MarketModelMultiProduct& product,
-                      MarketModelBasisSystem& basisSystem,
-                      MarketModelExerciseValue& rebate,
-                      MarketModelExerciseValue& control,
-                      Size numberOfPaths,
-                      std::vector<std::vector<LSNodeData> >& collectedData);
+    void collectNodeData(MarketModelEvolver& evolver,
+                         MarketModelMultiProduct& product,
+                         MarketModelNodeDataProvider& dataProvider,
+                         MarketModelExerciseValue& rebate,
+                         MarketModelExerciseValue& control,
+                         Size numberOfPaths,
+                         std::vector<std::vector<NodeData> >& collectedData);
 
 }
 
