@@ -40,7 +40,26 @@ namespace QuantLib {
         virtual Real value() const = 0;
     };
 
+#ifndef QL_DISABLE_DEPRECATED
 
+      //! market element returning a stored value
+    class SimpleQuote : public Quote {
+      public:
+        SimpleQuote(Real value);
+        //! \name Quote interface
+        //@{
+        Real value() const;
+        //@}
+        //! \name Modifiers
+        //@{
+        //! returns the difference between the new value and the old value
+        Real setValue(Real value);
+        //@}
+      private:
+        Real value_;
+    };
+
+ 
     //! market element whose value depends on another market element
     /*! \test the correctness of the returned values is tested by
               checking them against numerical calculations.
@@ -91,6 +110,24 @@ namespace QuantLib {
 
     // inline definitions
 
+    // simple quote
+
+   inline SimpleQuote::SimpleQuote(Real value)
+    : value_(value) {}
+
+    inline Real SimpleQuote::value() const {
+        return value_;
+    }
+
+    inline Real SimpleQuote::setValue(Real value) {
+        Real diff = value-value_;
+        if (diff != 0.0) {
+            value_ = value;
+            notifyObservers();
+        }
+        return diff;
+    }
+
     // derived quote
 
     template <class UnaryFunction>
@@ -136,6 +173,8 @@ namespace QuantLib {
     inline void CompositeQuote<BinaryFunction>::update() {
         notifyObservers();
     }
+
+#endif
 
 }
 
