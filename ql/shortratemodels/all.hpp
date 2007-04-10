@@ -27,7 +27,6 @@
 #include <ql/shortratemodels/calibrationhelpers/all.hpp>
 #include <ql/shortratemodels/onefactormodels/all.hpp>
 #include <ql/shortratemodels/twofactormodels/all.hpp>
-#include <ql/shortratemodels/libormarketmodels/all.hpp>
 
 
 #endif
