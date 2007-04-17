@@ -1,5 +1,5 @@
 
-SUBDIRS = marketmodels shortrate volatility
+SUBDIRS = equity marketmodels shortrate volatility
 
 AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir}
 
@@ -10,6 +10,7 @@ this_include_HEADERS = \
 libModels_la_SOURCES =
 
 libModels_la_LIBADD = \
+    equity/libEquityModels.la \
     marketmodels/libMarketModels.la \
     shortrate/libShortRateModels.la \
     volatility/libVolatilityModels.la
