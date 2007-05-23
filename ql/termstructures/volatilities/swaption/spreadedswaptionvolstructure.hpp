@@ -36,9 +36,15 @@ namespace QuantLib {
             Spread spread = 0.);
 
       protected:
+        // All virtual methods of base classes must be forwarded
         //! \name TermStructure interface
         //@{
+        DayCounter dayCounter() const;
         Date maxDate() const;
+        Time maxTime() const;
+        const Date& referenceDate() const;
+        Calendar calendar() const;
+        Natural settlementDays() const;
         //@}
         //! \name SwaptionVolatilityStructure interface
         //@{
