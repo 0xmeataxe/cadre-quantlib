@@ -24,11 +24,21 @@
 #ifndef quantlib_replication_hpp
 #define quantlib_replication_hpp
 
+#include <ostream>
+
 namespace QuantLib {
 
+    //! Digital option replication strategy
+    /*! Specification of replication strategies used to price
+        the embedded digital option in a digital coupon.        
+    */
     struct Replication {
         enum Type { Sub, Central, Super };
     };
+
+    /*! \relates Replication */
+    std::ostream& operator<<(std::ostream&,
+                             Replication::Type);
 
 }
 
