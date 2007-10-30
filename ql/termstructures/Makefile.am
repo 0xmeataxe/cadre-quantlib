@@ -1,15 +1,17 @@
 
-SUBDIRS = yield volatility
+SUBDIRS = inflation volatility yield
 
 AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir}
 
 this_includedir=${includedir}/${subdir}
 this_include_HEADERS = \
 	all.hpp \
+	inflationtermstructure.hpp \
 	voltermstructure.hpp \
 	yieldtermstructure.hpp
 
 libTermStructures_la_SOURCES = \
+	inflationtermstructure.cpp \
 	voltermstructure.cpp \
 	yieldtermstructure.cpp
 
