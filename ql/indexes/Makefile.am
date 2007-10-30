@@ -1,5 +1,5 @@
 
-SUBDIRS = ibor swap
+SUBDIRS = ibor inflation swap
 
 AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir}
 
@@ -8,13 +8,17 @@ this_include_HEADERS = \
     all.hpp \
     iborindex.hpp \
     indexmanager.hpp \
+    inflationindex.hpp \
     interestrateindex.hpp \
+    region.hpp \
     swapindex.hpp
 
 libIndexes_la_SOURCES = \
     iborindex.cpp \
     indexmanager.cpp \
+    inflationindex.cpp \
     interestrateindex.cpp \
+    region.cpp \
     swapindex.cpp
 
 libIndexes_la_LIBADD = \
