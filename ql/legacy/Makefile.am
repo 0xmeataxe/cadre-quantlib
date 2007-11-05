@@ -1,5 +1,5 @@
 
-SUBDIRS = libormarketmodels pricers
+SUBDIRS = libormarketmodels pricers termstructures
 
 AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir}
 
@@ -11,7 +11,8 @@ libLegacy_la_SOURCES =
 
 libLegacy_la_LIBADD = \
     libormarketmodels/libLiborMarketModels.la \
-    pricers/libPricers.la
+    pricers/libPricers.la \
+    termstructures/libLegacyTermStructures.la
 
 noinst_LTLIBRARIES = libLegacy.la
 
