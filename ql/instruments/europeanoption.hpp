@@ -1,7 +1,7 @@
 /* -*- mode: c++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /*
- Copyright (C) 2004 StatPro Italia srl
+ Copyright (C) 2004, 2007 StatPro Italia srl
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -32,11 +32,8 @@ namespace QuantLib {
     /*! \ingroup instruments */
     class EuropeanOption : public VanillaOption {
       public:
-        EuropeanOption(const boost::shared_ptr<StochasticProcess>&,
-                       const boost::shared_ptr<StrikedTypePayoff>&,
-                       const boost::shared_ptr<Exercise>&,
-                       const boost::shared_ptr<PricingEngine>& engine =
-                           boost::shared_ptr<PricingEngine>());
+        EuropeanOption(const boost::shared_ptr<StrikedTypePayoff>&,
+                       const boost::shared_ptr<Exercise>&);
     };
 
 }
