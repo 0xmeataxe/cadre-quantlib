@@ -39730,7 +39730,8 @@ namespace QuantLib {
 
         bool useAltPolynomials = false;
 
-        if (directionIntegers == Kuo || directionIntegers == Kuo2 || directionIntegers == Kuo3)
+        if (directionIntegers == Kuo || directionIntegers == Kuo2 || directionIntegers == Kuo3
+			|| directionIntegers == SobolLevitan || directionIntegers == SobolLevitanLemieux)
             useAltPolynomials = true;
 
         // degree 0 is not used
