@@ -39744,7 +39744,7 @@ namespace QuantLib {
 
         unsigned int altDegree = useAltPolynomials ? maxAltDegree : 0;
 
-        for (; k<std::min(dimensionality_,altDegree); k++,index++)
+        for (; k<std::min<Size>(dimensionality_,altDegree); k++,index++)
         {
             ppmt[k] = AltPrimitivePolynomials[currentDegree-1][index];
             if (ppmt[k]==-1)
