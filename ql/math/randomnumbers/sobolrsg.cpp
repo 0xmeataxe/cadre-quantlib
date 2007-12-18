@@ -23,8 +23,8 @@
 #include <ql/math/randomnumbers/primitivepolynomials.h>
 #include <ql/math/randomnumbers/mt19937uniformrng.hpp>
 #include <ql/errors.hpp>
-#include <cmath>
 
+#include <cmath>
 namespace QuantLib {
 
     namespace {
@@ -285,13 +285,15 @@ namespace QuantLib {
             1UL, 1UL, 3UL, 13UL, 11UL, 7UL, 0UL };
         const unsigned long dim16initializers[] = {
             1UL, 3UL, 3UL, 5UL, 19UL, 33UL, 0UL };
+
         const unsigned long dim17initializers[] = {
             1UL, 1UL, 7UL, 13UL, 25UL, 5UL, 0UL };
         const unsigned long dim18initializers[] = {
             1UL, 1UL, 1UL, 3UL, 13UL, 39UL, 0UL };
         const unsigned long dim19initializers[] = {
             1UL, 3UL, 5UL, 11UL, 7UL, 11UL, 0UL };
-        const unsigned long dim20initializers[] = {
+       
+            const unsigned long dim20initializers[] = {
             1UL, 3UL, 1UL, 7UL, 3UL, 23UL, 79UL, 0UL };
         const unsigned long dim21initializers[] = {
             1UL, 3UL, 1UL, 15UL, 17UL, 63UL, 13UL, 0UL };
@@ -6286,9 +6288,10 @@ namespace QuantLib {
             const unsigned long dim4925KuoInit[]        =   {   1   ,   3   ,   7   ,   5   ,   23  ,   9   ,   25  ,   167 ,   241 ,   755 ,   1789    ,   1977    ,   6325    ,   5425    ,   23247   ,   64181   ,0 };
 
 
-            const unsigned long * const Kuoinitializers[4924]
+            const unsigned long * const Kuoinitializers[4925]
             =
             {
+                dim1KuoInit,
                 dim2KuoInit,
                 dim3KuoInit,
                 dim4KuoInit,
@@ -15163,9 +15166,10 @@ namespace QuantLib {
             const unsigned long dim3945Kuo2Init[]       =   {   1   ,   3   ,   1   ,   5   ,   17  ,   3   ,   65  ,   167 ,   237 ,   785 ,   771 ,   4033    ,   6053    ,   343 ,   9499    ,   55861   ,0 };
             const unsigned long dim3946Kuo2Init[]       =   {   1   ,   3   ,   3   ,   3   ,   19  ,   57  ,   23  ,   119 ,   75  ,   435 ,   1023    ,   2357    ,   4671    ,   14581   ,   15343   ,   2383    ,0 };
 
-            const unsigned long * const Kuo2initializers[3945]
+            const unsigned long * const Kuo2initializers[3946]
             =
             {
+                dim1Kuo2Init,
                 dim2Kuo2Init,
                 dim3Kuo2Init,
                 dim4Kuo2Init,
@@ -23700,9 +23704,10 @@ namespace QuantLib {
             const unsigned long dim4585Kuo3Init[]   =   {   1   ,   1   ,   5   ,   7   ,   1   ,   31  ,   123 ,   199 ,   347 ,   235 ,   1367    ,   2451    ,   7211    ,   6095    ,   19245   ,   55993   ,0 };
             const unsigned long dim4586Kuo3Init[]   =   {   1   ,   3   ,   7   ,   3   ,   25  ,   9   ,   25  ,   117 ,   315 ,   497 ,   1235    ,   1969    ,   7981    ,   9743    ,   20951   ,   30635   ,0 };
 
-            const unsigned long * const Kuo3initializers[4585]
+            const unsigned long * const Kuo3initializers[4586]
             =
             {
+                dim1Kuo3Init,
                 dim2Kuo3Init,
                 dim3Kuo3Init,
                 dim4Kuo3Init,
@@ -30091,9 +30096,10 @@ namespace QuantLib {
             const unsigned long dim1799JoeKuoD6Init[]   =   {   1   ,   1   ,   1   ,   3   ,   21  ,   31  ,   95  ,   217 ,   175 ,   837 ,   583 ,   1149    ,   8073    ,   12751   ,0 };
 
 
-            const unsigned long * const JoeKuoD6initializers[1798]
+            const unsigned long * const JoeKuoD6initializers[1799]
             =
             {
+                dim1JoeKuoD6Init,
                 dim2JoeKuoD6Init,
                 dim3JoeKuoD6Init,
                 dim4JoeKuoD6Init,
@@ -33794,9 +33800,10 @@ namespace QuantLib {
             const unsigned long dim1898JoeKuoD7Init[]   =   {   1   ,   1   ,   5   ,   9   ,   17  ,   55  ,   63  ,   31  ,   331 ,   945 ,   1953    ,   4093    ,   6875    ,   3519    ,   23329   ,0 };
             const unsigned long dim1899JoeKuoD7Init[]   =   {   1   ,   1   ,   1   ,   3   ,   23  ,   17  ,   17  ,   39  ,   173 ,   1013    ,   527 ,   2563    ,   3623    ,   10049   ,   10919   ,0 };
 
-            const unsigned long * const JoeKuoD7initializers[1898]
+            const unsigned long * const JoeKuoD7initializers[1899]
             =
             {
+                dim1JoeKuoD7Init,
                 dim2JoeKuoD7Init,
                 dim3JoeKuoD7Init,
                 dim4JoeKuoD7Init,
@@ -37697,9 +37704,10 @@ namespace QuantLib {
             const unsigned long dim1998JoeKuoD5Init[]   =   {   1   ,   1   ,   7   ,   7   ,   13  ,   27  ,   87  ,   43  ,   433 ,   401 ,   1441    ,   1301    ,   2639    ,   5773    ,   12431   ,0 };
             const unsigned long dim1999JoeKuoD5Init[]   =   {   1   ,   1   ,   3   ,   15  ,   21  ,   55  ,   17  ,   57  ,   449 ,   811 ,   519 ,   2329    ,   7607    ,   4255    ,   2845    ,0 };
 
-            const unsigned long * const JoeKuoD5initializers[1998]
+            const unsigned long * const JoeKuoD5initializers[1999]
             =
             {
+                dim1JoeKuoD5Init,
                 dim2JoeKuoD5Init,
                 dim3JoeKuoD5Init,
                 dim4JoeKuoD5Init,
@@ -39717,8 +39725,8 @@ namespace QuantLib {
 
         QL_REQUIRE(dimensionality>0,
                    "dimensionality must be greater than 0");
-        QL_REQUIRE(dimensionality<=PPMT_MAX_DIM,
-                   "dimensionality " << dimensionality
+      QL_REQUIRE(dimensionality<=PPMT_MAX_DIM,
+               "dimensionality " << dimensionality
                    << " exceeds the number of available "
                    << "primitive polynomials modulo two ("
                    << PPMT_MAX_DIM << ")");
@@ -39852,7 +39860,7 @@ namespace QuantLib {
                 }
                 break;
             case JoeKuoD6:
-                // maxTabulated=1798
+                // maxTabulated=1799
                 maxTabulated = sizeof(JoeKuoD6initializers)/sizeof(unsigned long *)+1;
                 for (k=1; k<std::min(dimensionality_, maxTabulated); k++) {
                     j = 0;
@@ -39886,7 +39894,7 @@ namespace QuantLib {
                 for (k=1; k<std::min(dimensionality_, maxTabulated); k++) {
                     j = 0;
                     // 0UL marks coefficients' end for a given dimension
-                    while (Linitializers[k-1][j] != 0UL) {
+                    while (Kuoinitializers[k-1][j] != 0UL) {
                         directionIntegers_[k][j] = Kuoinitializers[k-1][j];
                         directionIntegers_[k][j] <<= (bits_-j-1);
                         j++;
@@ -39899,7 +39907,7 @@ namespace QuantLib {
                 for (k=1; k<std::min(dimensionality_, maxTabulated); k++) {
                     j = 0;
                     // 0UL marks coefficients' end for a given dimension
-                    while (Linitializers[k-1][j] != 0UL) {
+                    while (Kuo2initializers[k-1][j] != 0UL) {
                         directionIntegers_[k][j] = Kuo2initializers[k-1][j];
                         directionIntegers_[k][j] <<= (bits_-j-1);
                         j++;
@@ -39913,7 +39921,7 @@ namespace QuantLib {
                 for (k=1; k<std::min(dimensionality_, maxTabulated); k++) {
                     j = 0;
                     // 0UL marks coefficients' end for a given dimension
-                    while (Linitializers[k-1][j] != 0UL) {
+                    while (Kuo3initializers[k-1][j] != 0UL) {
                         directionIntegers_[k][j] = Kuo3initializers[k-1][j];
                         directionIntegers_[k][j] <<= (bits_-j-1);
                         j++;
@@ -39932,7 +39940,7 @@ namespace QuantLib {
                 for (Size l=1; l<=degree[k]; l++) {
                     do {
                         // u is in (0,1)
-                        double u = uniformRng.next().value;
+                        Real u = uniformRng.next().value;
                         // the direction integer has at most the
                         // rightmost l bits non-zero
                         directionIntegers_[k][l-1] =
@@ -40020,7 +40028,9 @@ namespace QuantLib {
     }
 
 
-    const std::vector<unsigned long>& SobolRsg::nextInt32Sequence() const {
+
+    const std::vector<unsigned long>& SobolRsg::nextInt32Sequence() const
+    {
         if (firstDraw_) {
             // it was precomputed in the constructor
             firstDraw_ = false;
@@ -40029,7 +40039,7 @@ namespace QuantLib {
         // increment the counter
         sequenceCounter_++;
         // did we overflow?
-        QL_REQUIRE(sequenceCounter_ != 0, "period exceeded");
+     QL_REQUIRE(sequenceCounter_ != 0, "period exceeded");
 
         // instead of using the counter n as new unique generating integer
         // for the n-th draw use the Gray code G(n) as proposed
