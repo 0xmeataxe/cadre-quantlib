@@ -292,8 +292,8 @@ namespace QuantLib {
             1UL, 1UL, 1UL, 3UL, 13UL, 39UL, 0UL };
         const unsigned long dim19initializers[] = {
             1UL, 3UL, 5UL, 11UL, 7UL, 11UL, 0UL };
-       
-            const unsigned long dim20initializers[] = {
+
+        const unsigned long dim20initializers[] = {
             1UL, 3UL, 1UL, 7UL, 3UL, 23UL, 79UL, 0UL };
         const unsigned long dim21initializers[] = {
             1UL, 3UL, 1UL, 15UL, 17UL, 63UL, 13UL, 0UL };
@@ -39739,7 +39739,7 @@ namespace QuantLib {
         bool useAltPolynomials = false;
 
         if (directionIntegers == Kuo || directionIntegers == Kuo2 || directionIntegers == Kuo3
-			|| directionIntegers == SobolLevitan || directionIntegers == SobolLevitanLemieux)
+            || directionIntegers == SobolLevitan || directionIntegers == SobolLevitanLemieux)
             useAltPolynomials = true;
 
         // degree 0 is not used
