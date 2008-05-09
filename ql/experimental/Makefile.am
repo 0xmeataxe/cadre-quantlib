@@ -1,5 +1,5 @@
 
-SUBDIRS = volatility
+SUBDIRS = callablebonds volatility
 
 AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir}
 
@@ -10,6 +10,7 @@ this_include_HEADERS = \
 libExperimental_la_SOURCES =
 
 libExperimental_la_LIBADD = \
+    callablebonds/libCallableBonds.la \
     volatility/libVolatility.la
 
 noinst_LTLIBRARIES = libExperimental.la
