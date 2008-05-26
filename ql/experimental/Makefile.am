@@ -1,5 +1,5 @@
 
-SUBDIRS = callablebonds coupons processes volatility
+SUBDIRS = callablebonds coupons credit processes volatility
 
 AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir}
 
@@ -12,6 +12,7 @@ libExperimental_la_SOURCES =
 libExperimental_la_LIBADD = \
     callablebonds/libCallableBonds.la \
     coupons/libCoupons.la \
+    credit/libCredit.la \
     processes/libProcesses.la \
     volatility/libVolatility.la
 
