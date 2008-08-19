@@ -137,6 +137,4 @@ namespace QuantLib {
 
 
 }
-
-
 #endif
