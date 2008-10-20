@@ -42,10 +42,12 @@ namespace QuantLib {
                            bool inArrears,
                            Real redemption,
                            const Date& issueDate)
-    : Bond(settlementDays, schedule.calendar(), faceAmount, schedule.endDate(), issueDate) {
+    : Bond(settlementDays, schedule.calendar(), issueDate) {
+
+        maturityDate_ = schedule.endDate();
 
         cashflows_ = CmsLeg(schedule, index)
-            .withNotionals(faceAmount_)
+            .withNotionals(faceAmount)
             .withPaymentDayCounter(paymentDayCounter)
             .withPaymentAdjustment(paymentConvention)
             .withFixingDays(fixingDays)
@@ -55,12 +57,10 @@ namespace QuantLib {
             .withFloors(floors)
             .inArrears(inArrears);
 
-        Date redemptionDate = calendar_.adjust(maturityDate_,
-                                               paymentConvention);
-        cashflows_.push_back(boost::shared_ptr<CashFlow>(new
-            SimpleCashFlow(faceAmount_*redemption/100.0, redemptionDate)));
+        addRedemptionsToCashflows(std::vector<Real>(1, redemption));
 
         QL_ENSURE(!cashflows().empty(), "bond with no cashflows!");
+        QL_ENSURE(redemptions_.size() == 1, "multiple redemptions created");
 
         registerWith(index);
     }
