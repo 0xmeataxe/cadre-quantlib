@@ -39794,7 +39794,7 @@ namespace QuantLib {
             directionIntegers_[0][j] = (1UL<<(bits_-j-1));
 
 
-        Size maxTabulated;
+        Size maxTabulated = 0;
         // dimensions from 2 (k=1) to maxTabulated (k=maxTabulated-1) included
         // are initialized from tabulated coefficients
         switch (directionIntegers) {
