@@ -74,7 +74,12 @@ namespace QuantLib {
         Real defaultDensityImpl(Time) const;
     };
 
-}
+    // inline methods
 
+    inline Real HazardRateStructure::defaultDensityImpl(Time t) const {
+        return hazardRateImpl(t) * survivalProbabilityImpl(t);
+    }
+
+}
 
 #endif
