@@ -54,7 +54,7 @@ namespace QuantLib {
     FdmHestonSolver::FdmHestonSolver(
         const Handle<HestonProcess>& process,
         const boost::shared_ptr<FdmMesher>& mesher,
-        const FdmHestonSolver::BoundaryConditionSet& bcSet,
+        const FdmBoundaryConditionSet& bcSet,
         const boost::shared_ptr<FdmStepConditionComposite> & condition,
         const boost::shared_ptr<Payoff>& payoff,
         const Time maturity,
@@ -138,10 +138,7 @@ namespace QuantLib {
             break;
         }
 
-        for (Size j=0; j < v_.size(); ++j)
-            std::copy(rhs.begin()+j*x_.size(), rhs.begin()+(j+1)*x_.size(),
-                      resultValues_.row_begin(j));
-
+        std::copy(rhs.begin(), rhs.end(), resultValues_.begin());
         interpolation_ = boost::shared_ptr<BicubicSpline> (
             new BicubicSpline(x_.begin(), x_.end(),
                               v_.begin(), v_.end(),
@@ -150,15 +147,37 @@ namespace QuantLib {
 
     Real FdmHestonSolver::valueAt(Real s, Real v) const {
         calculate();
-        return interpolation_->operator()(std::log(s), v);
+        const Real x = std::log(s);
+        return interpolation_->operator()(x, v);
     }
 
-    Real FdmHestonSolver::deltaAt(Real s, Real v, Real eps) const {
-        return (valueAt(s+eps, v) - valueAt(s-eps, v))/(2*eps);
+    Real FdmHestonSolver::deltaAt(Real s, Real v) const {
+        calculate();
+        const Real x = std::log(s);
+        return interpolation_->derivativeX(x, v)/s;
     }
 
-    Real FdmHestonSolver::gammaAt(Real s, Real v, Real eps) const {
-        return (valueAt(s+eps, v)+valueAt(s-eps, v)-2*valueAt(s,v))/(eps*eps);
+    Real FdmHestonSolver::gammaAt(Real s, Real v) const {
+        calculate();
+        const Real x = std::log(s);
+        return (interpolation_->secondDerivativeX(x, v)
+                -interpolation_->derivativeX(x, v))/(s*s);
+    }
+    
+    Real FdmHestonSolver::meanVarianceDeltaAt(Real s, Real v) const {
+        calculate();
+        const Real x = std::log(s);
+        const Real alpha = process_->rho()*process_->sigma()/s;
+        return deltaAt(s, v) + alpha*interpolation_->derivativeY(x, v);
+    }
+
+    Real FdmHestonSolver::meanVarianceGammaAt(Real s, Real v) const {
+        calculate();
+        const Real x = std::log(s);
+        const Real alpha = process_->rho()*process_->sigma()/s;
+        return gammaAt(s, v) 
+                +  interpolation_->secondDerivativeY(x, v)*alpha*alpha
+                +2*interpolation_->derivativeXY(x, v)*alpha/s;
     }
 
     Real FdmHestonSolver::thetaAt(Real s, Real v) const {
@@ -169,9 +188,7 @@ namespace QuantLib {
         Matrix thetaValues(resultValues_.rows(), resultValues_.columns());
 
         const Array& rhs = thetaCondition_->getValues();
-        for (Size j=0; j < v_.size(); ++j)
-            std::copy(rhs.begin()+j*x_.size(), rhs.begin()+(j+1)*x_.size(),
-                      thetaValues.row_begin(j));
+        std::copy(rhs.begin(), rhs.end(), thetaValues.begin());
 
         return (BicubicSpline(x_.begin(), x_.end(), v_.begin(), v_.end(),
                               thetaValues)(std::log(s), v) - valueAt(s, v))

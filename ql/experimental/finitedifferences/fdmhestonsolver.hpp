@@ -39,17 +39,15 @@ namespace QuantLib {
     class FdmStepConditionComposite;
     class BicubicSpline;
 
-    class FdmHestonSolver : LazyObject {
+    class FdmHestonSolver : public LazyObject {
       public:
-        typedef std::vector<boost::shared_ptr<FdmDirichletBoundary> >
-            BoundaryConditionSet;
         enum FdmSchemeType {
             HundsdorferScheme, DouglasScheme, CraigSneydScheme };
 
         FdmHestonSolver(
             const Handle<HestonProcess>& process,
             const boost::shared_ptr<FdmMesher>& mesher,
-            const BoundaryConditionSet & bcSet,
+            const FdmBoundaryConditionSet & bcSet,
             const boost::shared_ptr<FdmStepConditionComposite> & condition,
             const boost::shared_ptr<Payoff>& payoff,
             Time maturity,
@@ -67,16 +65,19 @@ namespace QuantLib {
         // E.g. see Fabio Mercurio, Massimo Morini 
         // "A Note on Hedging with Local and Stochastic Volatility Models",
         // http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1294284  
-        Real deltaAt(Real s, Real v, Real eps) const;
-        Real gammaAt(Real s, Real v, Real eps) const;
+        Real deltaAt(Real s, Real v) const;
+        Real gammaAt(Real s, Real v) const;
 
+        Real meanVarianceDeltaAt(Real s, Real v) const;
+        Real meanVarianceGammaAt(Real s, Real v) const;
+        
       protected:
         void performCalculations() const;
 
       private:
         Handle<HestonProcess> process_;
         const boost::shared_ptr<FdmMesher> mesher_;
-        const BoundaryConditionSet bcSet_;
+        const FdmBoundaryConditionSet bcSet_;
         const boost::shared_ptr<FdmSnapshotCondition> thetaCondition_;
         const boost::shared_ptr<FdmStepConditionComposite> condition_;
         const Time maturity_;
