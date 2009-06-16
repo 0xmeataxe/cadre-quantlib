@@ -36,7 +36,7 @@ namespace QuantLib {
         FdmHestonVarianceMesher(
             Size size,
             const boost::shared_ptr<HestonProcess> & process,
-            Time maturity, Size tAvgSteps = 10);
+            Time maturity, Size tAvgSteps = 10, Real epsilon = 0.0001);
 
         Real volaEstimate() const { return volaEstimate_; }
 
