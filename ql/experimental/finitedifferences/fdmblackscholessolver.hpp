@@ -2,8 +2,8 @@
 
 /*
  Copyright (C) 2008 Andreas Gaida
- Copyright (C) 2008 Ralph Schreyer
- Copyright (C) 2008 Klaus Spanderen
+ Copyright (C) 2008,2009 Ralph Schreyer
+ Copyright (C) 2008,2009 Klaus Spanderen
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -31,6 +31,7 @@
 #include <ql/math/interpolations/cubicinterpolation.hpp>
 #include <ql/experimental/finitedifferences/fdmmesher.hpp>
 #include <ql/experimental/finitedifferences/fdmdirichletboundary.hpp>
+#include <ql/experimental/finitedifferences/fdminnervaluecalculator.hpp>
 #include <ql/experimental/finitedifferences/fdmstepconditioncomposite.hpp>
 #include <ql/experimental/finitedifferences/fdmsnapshotcondition.hpp>
 
@@ -46,7 +47,8 @@ namespace QuantLib {
             const boost::shared_ptr<FdmMesher>& mesher,
             const BoundaryConditionSet & bcSet,
             const boost::shared_ptr<FdmStepConditionComposite> & condition,
-            const boost::shared_ptr<Payoff>& payoff,
+            const boost::shared_ptr<FdmInnerValueCalculator>& calculator,
+            Real strike,
             Time maturity,
             Size timeSteps,
             Real theta = 0.5,
@@ -67,7 +69,7 @@ namespace QuantLib {
         const BoundaryConditionSet bcSet_;
         const boost::shared_ptr<FdmSnapshotCondition> thetaCondition_;
         const boost::shared_ptr<FdmStepConditionComposite> condition_;
-        const boost::shared_ptr<Payoff> payoff_;
+        const Real strike_;
         const Time maturity_;
         const Size timeSteps_;
 

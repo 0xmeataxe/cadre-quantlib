@@ -2,8 +2,8 @@
 
 /*
  Copyright (C) 2008 Andreas Gaida
- Copyright (C) 2008 Ralph Schreyer
- Copyright (C) 2008 Klaus Spanderen
+ Copyright (C) 2008,2009 Ralph Schreyer
+ Copyright (C) 2008,2009 Klaus Spanderen
 
  This file is part of QuantLib, a free-software/open-source library
  for financial quantitative analysts and developers - http://quantlib.org/
@@ -49,7 +49,8 @@ namespace QuantLib {
         const boost::shared_ptr<FdmMesher>& mesher,
         const FdmBlackScholesSolver::BoundaryConditionSet& bcSet,
         const boost::shared_ptr<FdmStepConditionComposite> & condition,
-        const boost::shared_ptr<Payoff>& payoff,
+        const boost::shared_ptr<FdmInnerValueCalculator>& calculator,
+        const Real strike,
         const Time maturity,
         const Size timeSteps,
         Real theta,
@@ -63,7 +64,7 @@ namespace QuantLib {
                       condition->stoppingTimes().empty() ? maturity :
                                  condition->stoppingTimes().front()))),
       condition_(addCondition(thetaCondition_, condition)),
-      payoff_(payoff),
+      strike_(strike),
       maturity_(maturity),
       timeSteps_(timeSteps),
       theta_(theta),
@@ -79,15 +80,15 @@ namespace QuantLib {
         const FdmLinearOpIterator endIter = layout->end();
         for (FdmLinearOpIterator iter = layout->begin(); iter != endIter;
              ++iter) {
-            initialValues_[iter.index()] = payoff->operator()(
-                                        std::exp(mesher->location(iter, 0)));
+            initialValues_[iter.index()] = calculator->innerValue(
+            		mesher, iter);
             x_.push_back(mesher->location(iter, 0));
         }
     }
 
     void FdmBlackScholesSolver::performCalculations() const {
         boost::shared_ptr<FdmBlackScholesOp> map(new FdmBlackScholesOp(
-                mesher_, process_.currentLink(), payoff_, 
+                mesher_, process_.currentLink(), strike_,
                 localVol_, illegalLocalVolOverwrite_));
 
         Array rhs(initialValues_.size());
