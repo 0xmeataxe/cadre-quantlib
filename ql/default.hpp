@@ -24,57 +24,9 @@
 #ifndef quantlib_default_hpp
 #define quantlib_default_hpp
 
-#include <ql/event.hpp>
-#include <ql/math/comparison.hpp>
+#include <ql/qldefines.hpp>
 
 namespace QuantLib {
-
-    //! Seniority of a default event
-    enum Seniority { Senior,
-                     Subordinated,
-                     Secured,
-                     UpperTier,
-                     Tier1,
-                     PolicyClaims,
-                     AnySeniority };
-
-    //! Restructuring of a default event
-    enum Restructuring { NoRestructuring,
-                         ModifiedRestructuring,
-                         ModifiedModifiedRestructuring,
-                         FullRestructuring,
-                         AnyRestructuring };
-
-    //! Credit-default event
-    class DefaultEvent : public Event {
-      public:
-        DefaultEvent(const Date& date,
-                     Real recoveryRate,
-                     Seniority seniority = AnySeniority,
-                     Restructuring restructuring = AnyRestructuring);
-        //! \name Event interface
-        //@{
-        Date date() const { return defaultDate_; }
-        //@}
-        Real recoveryRate() const;
-        Seniority seniority() const;
-        Restructuring restructuring() const;
-      private:
-        Date defaultDate_;
-        Rate recoveryRate_;
-        Seniority seniority_;
-        Restructuring restructuring_;
-        void accept(AcyclicVisitor&);
-    };
-
-    template <>
-    struct earlier_than<DefaultEvent>
-            : public std::binary_function<DefaultEvent,DefaultEvent,bool> {
-        bool operator()(const DefaultEvent& e1,
-                        const DefaultEvent& e2) {
-            return e1.date() < e2.date();
-        }
-    };
 
     //! information on a default-protection contract
     struct Protection {
