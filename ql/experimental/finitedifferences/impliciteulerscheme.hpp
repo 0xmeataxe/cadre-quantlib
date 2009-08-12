@@ -27,12 +27,12 @@
 #define quantlib_implicit_euler_scheme_hpp
 
 #include <ql/methods/finitedifferences/operatortraits.hpp>
-#include <ql/experimental/finitedifferences/fdmdirichletboundary.hpp>
 #include <ql/experimental/finitedifferences/fdmlinearopcomposite.hpp>
+#include <ql/experimental/finitedifferences/fdmdirichletboundary.hpp>
 
 namespace QuantLib {
 
-    class ImplicitEulerScheme  {
+    class ImplicitEulerScheme {
       public:
         // typedefs
         typedef OperatorTraits<FdmLinearOp> traits;
@@ -46,7 +46,7 @@ namespace QuantLib {
             const boost::shared_ptr<FdmLinearOpComposite>& map,
             const std::vector<boost::shared_ptr<FdmDirichletBoundary> >& bc_set
                 = std::vector<boost::shared_ptr<FdmDirichletBoundary> >(),
-            Real relTol = 1e-6);
+            Real relTol = 1e-8);
 
         void step(array_type& a, Time t);
         void setStep(Time dt);
@@ -56,7 +56,7 @@ namespace QuantLib {
           
         Time dt_;
         const Real relTol_;
-        const boost::shared_ptr<FdmLinearOpComposite> & map_;
+        const boost::shared_ptr<FdmLinearOpComposite> map_;
         const std::vector<boost::shared_ptr<FdmDirichletBoundary> > bcSet_;
     };
 }

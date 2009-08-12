@@ -23,6 +23,7 @@
 #include <ql/experimental/finitedifferences/impliciteulerscheme.hpp>
 
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 namespace QuantLib {
 
@@ -40,18 +41,19 @@ namespace QuantLib {
         return r - dt_*map_->apply(r);
     }
 
-        
     void ImplicitEulerScheme::step(array_type& a, Time t) {
         QL_REQUIRE(t-dt_ > -1e-8, "a step towards negative time given");
         map_->setTime(std::max(0.0, t-dt_), t);
 
-        const BiCGstab biCGstab(
+        a = BiCGstab(
                 boost::function<Disposable<Array>(const Array&)>(
                     boost::bind(&ImplicitEulerScheme::apply, this, _1)), 
-                10*a.size(), relTol_);
+                10*a.size(), relTol_,
+                boost::function<Disposable<Array>(const Array&)>(
+                    boost::bind(&FdmLinearOpComposite::preconditioner, 
+                                map_, _1, -dt_))
+            ).solve(a).x;
         
-        a = biCGstab.solve(a).x;
-
         for (Size i=0; i<bcSet_.size(); i++)
             bcSet_[i]->applyAfterApplying(a);
     }
