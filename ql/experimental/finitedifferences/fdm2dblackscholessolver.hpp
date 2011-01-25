@@ -25,20 +25,13 @@
 
 #include <ql/handle.hpp>
 #include <ql/patterns/lazyobject.hpp>
-#include <ql/math/matrix.hpp>
-#include <ql/experimental/finitedifferences/fdmquantohelper.hpp>
+#include <ql/experimental/finitedifferences/fdmsolverdesc.hpp>
 #include <ql/experimental/finitedifferences/fdmbackwardsolver.hpp>
-#include <ql/experimental/finitedifferences/fdmdirichletboundary.hpp>
 
 namespace QuantLib {
 
-    class FdmDirichletBoundary;
-    class FdmInnerValueCalculator;
-    class FdmMesher;
-    class FdmSnapshotCondition;
-    class FdmStepConditionComposite;
+    class Fdm2DimSolver;
     class GeneralizedBlackScholesProcess;
-    class BicubicSpline;
 
     class Fdm2dBlackScholesSolver : public LazyObject {
       public:
@@ -46,13 +39,7 @@ namespace QuantLib {
             const Handle<GeneralizedBlackScholesProcess>& p1,
             const Handle<GeneralizedBlackScholesProcess>& p2,
             const Real correlation,
-            const boost::shared_ptr<FdmMesher>& mesher,
-            const FdmBoundaryConditionSet & bcSet,
-            const boost::shared_ptr<FdmStepConditionComposite> & condition,
-            const boost::shared_ptr<FdmInnerValueCalculator>& calculator,
-            Time maturity,
-            Size timeSteps,
-            Size dampingSteps = 0,
+            const FdmSolverDesc& solverDesc,
             const FdmSchemeDesc& schemeDesc = FdmSchemeDesc::Hundsdorfer());
 
         Real valueAt(Real x, Real y) const;
@@ -70,18 +57,10 @@ namespace QuantLib {
         const Handle<GeneralizedBlackScholesProcess> p1_;
         const Handle<GeneralizedBlackScholesProcess> p2_;
         const Real correlation_;
-        const boost::shared_ptr<FdmMesher> mesher_;
-        const FdmBoundaryConditionSet bcSet_;
-        const boost::shared_ptr<FdmSnapshotCondition> thetaCondition_;
-        const boost::shared_ptr<FdmStepConditionComposite> condition_;
-        const Time maturity_;
-        const Size timeSteps_;
-        const Size dampingSteps_;
+        const FdmSolverDesc solverDesc_;
         const FdmSchemeDesc schemeDesc_;
 
-        std::vector<Real> x_, y_, initialValues_;
-        mutable Matrix resultValues_;
-        mutable boost::shared_ptr<BicubicSpline> interpolation_;
+        mutable boost::shared_ptr<Fdm2DimSolver> solver_;
     };
 }
 
