@@ -40,15 +40,14 @@ namespace QuantLib {
         : public GenericEngine<VanillaSwingOption::arguments,
                                VanillaSwingOption::results> {
       public:
-            typedef FdmExtOUJumpModelInnerValue::Shape Shape;
+        typedef FdmExtOUJumpModelInnerValue::Shape Shape;
 
-            FdSimpleExtOUJumpSwingEngine(
-              const boost::shared_ptr<ExtOUWithJumpsProcess>& p,
-              const boost::shared_ptr<YieldTermStructure>& rTS,
-              Size tGrid = 50, Size xGrid = 200, Size yGrid=50,
-              const boost::shared_ptr<Shape>& shape
-                                                 = boost::shared_ptr<Shape>(),
-              const FdmSchemeDesc& schemeDesc = FdmSchemeDesc::Hundsdorfer());
+        FdSimpleExtOUJumpSwingEngine(
+            const boost::shared_ptr<ExtOUWithJumpsProcess>& p,
+            const boost::shared_ptr<YieldTermStructure>& rTS,
+            Size tGrid = 50, Size xGrid = 200, Size yGrid=50,
+            const boost::shared_ptr<Shape>& shape = boost::shared_ptr<Shape>(),
+            const FdmSchemeDesc& schemeDesc = FdmSchemeDesc::Hundsdorfer());
 
         void calculate() const;
 
