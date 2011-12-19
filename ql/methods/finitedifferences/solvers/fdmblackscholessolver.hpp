@@ -32,15 +32,12 @@
 
 namespace QuantLib {
 
-    class CubicInterpolation;
+    class Fdm1DimSolver;
     class FdmSnapshotCondition;
     class GeneralizedBlackScholesProcess;
 
     class FdmBlackScholesSolver : public LazyObject {
       public:
-        typedef std::vector<boost::shared_ptr<FdmDirichletBoundary> >
-            BoundaryConditionSet;
-
         FdmBlackScholesSolver(
             const Handle<GeneralizedBlackScholesProcess>& process,
             Real strike,
@@ -62,15 +59,10 @@ namespace QuantLib {
         const Real strike_;
         const FdmSolverDesc solverDesc_;
         const FdmSchemeDesc schemeDesc_;
-        const boost::shared_ptr<FdmMesher> mesher_;
-        const boost::shared_ptr<FdmSnapshotCondition> thetaCondition_;
-        const boost::shared_ptr<FdmStepConditionComposite> conditions_;
         const bool localVol_;
         const Real illegalLocalVolOverwrite_;
 
-        std::vector<Real> x_, initialValues_;
-        mutable Array resultValues_;
-        mutable boost::shared_ptr<CubicInterpolation> interpolation_;
+        mutable boost::shared_ptr<Fdm1DimSolver> solver_;
     };
 }
 
