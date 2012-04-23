@@ -35,7 +35,8 @@ namespace QuantLib {
         Concentrating1dMesher(
             Real start, Real end, Size size,
             const std::pair<Real, Real>& cPoints
-                     = (std::pair<double, double>(Null<Real>(), Null<Real>())));
+                     = (std::pair<double, double>(Null<Real>(), Null<Real>())),
+			const bool requireCPoint = false);
     };
 }
 
