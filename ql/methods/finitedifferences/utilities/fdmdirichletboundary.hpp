@@ -42,7 +42,7 @@ namespace QuantLib {
         typedef FdmLinearOp::array_type array_type;
         typedef BoundaryCondition<FdmLinearOp>::Side Side;
 
-        FdmDirichletBoundary(const boost::shared_ptr<FdmMesher>& layout,
+        FdmDirichletBoundary(const boost::shared_ptr<FdmMesher>& mesher,
                              Real valueOnBoundary, Size direction, Side side);
 
         void applyBeforeApplying(operator_type&) const;
@@ -56,9 +56,9 @@ namespace QuantLib {
       private:
         const Side side_;  
         const Real valueOnBoundary_;
+        const std::vector<Size> indices_;
 
         Real xExtreme_;
-        std::vector<Size> indicies_;
     };
 }
 
