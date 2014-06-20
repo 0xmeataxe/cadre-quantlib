@@ -103,8 +103,8 @@ int main(int, char* []) {
             hazardRates.size(), boost::make_shared<ConstantRecoveryModel>(
             ConstantRecoveryModel(0.5, SeniorSec)));
         boost::shared_ptr<Basket> theBskt = boost::make_shared<Basket>(
-            names, std::vector<Real>(hazardRates.size(), 100.), thePool, 
-            defaultKeys, rrModels);
+            todaysDate, names, std::vector<Real>(hazardRates.size(), 100.), 
+            thePool);
 
         /* --------------------------------------------------------------
                         SET UP JOINT DEFAULT EVENT LATENT MODELS
@@ -114,31 +114,56 @@ int main(int, char* []) {
         std::vector<std::vector<Real> > fctrsWeights(hazardRates.size(), 
             std::vector<Real>(1, std::sqrt(0.1)));
         // Gaussian integrable joint default model:
-        GaussianDefProbLM lmG(theBskt, fctrsWeights, 
+        GaussianDefProbLM lmG(/*theBskt, */fctrsWeights, 
             LatentModelIntegrationType::GaussianQuadrature,
 			GaussianCopulaPolicy::initTraits() // otherwise gcc screams
 			);
-
+        // Gaussian random joint default model:
+        Size numSimulations = 1000000;
+        Size numCoresUsed = 4;
+        // Sobol, many cores
+        RandomDefaultLM<GaussianCopulaPolicy> rdlmG(
+            theBskt, lmG, std::vector<Real>(), numSimulations, 1.e-6, 2863311530, numCoresUsed);
+        // Monothread only
+        /*
+        RandomDefaultLM<GaussianCopulaPolicy, 
+            RandomSequenceGenerator<MersenneTwisterUniformRng> > rdlmG(
+            theBskt, lmT, std::vector<Real>(), numSimulations, 1.e-6, 2863311530, numCoresUsed);
+        */
         // Define StudentT copula
         // this is as far as we can be from the Gaussian
-        std::vector<Integer> ordersT(2, 3);
+        std::vector<Integer> ordersT(2, 37);
         TCopulaPolicy::initTraits iniT;
         iniT.tOrders = ordersT;
         // StudentT integrable joint default model:
-        TDefProbLM lmT(theBskt, fctrsWeights, 
-            LatentModelIntegrationType::GaussianQuadrature
-            , iniT);
+        TDefProbLM lmT(/*theBskt, */fctrsWeights, 
+            LatentModelIntegrationType::GaussianQuadrature, iniT);
+        // StudentT random joint default model:
+        // Sobol, many cores
+        RandomDefaultLM<TCopulaPolicy> rdlmT(
+            theBskt, lmT, std::vector<Real>(), numSimulations, 1.e-6, 2863311530, numCoresUsed);
+        // Monothread only
+        /*
+        RandomDefaultLM<TCopulaPolicy, 
+            RandomSequenceGenerator<
+                PolarStudentTRng<MersenneTwisterUniformRng> > > rdlmT(
+            theBskt, lmT, std::vector<Real>(), numSimulations, 1.e-6, 2863311530, numCoresUsed);
+        */
 
         /* --------------------------------------------------------------
                         DUMP SOME RESULTS
         -------------------------------------------------------------- */
         std::cout << 
-            "T versus Gaussian prob of extreme event -" 
+            "T versus Gaussian prob of extreme event (random and integrable)-" 
             << std::endl;
         Date calcDate(TARGET().advance(Settings::instance().evaluationDate(), 
             Period(120, Months)));
         for(Size numEvts=0; numEvts <=3; numEvts++) {
             std::cout << "-Prob of " << 3 << " events... " <<
+            rdlmT.probAtLeastNEvents(numEvts, calcDate)
+            << " ... " <<
+            rdlmG.probAtLeastNEvents(numEvts, calcDate) 
+            << " ... " <<
             lmT.probAtLeastNEvents(numEvts, calcDate)
             << " ... " <<
             lmG.probAtLeastNEvents(numEvts, calcDate) 
@@ -168,7 +193,7 @@ int main(int, char* []) {
             cout << endl;
         }
         cout << endl;
-        cout << "----StudentT default correlations---" << endl;
+        cout << "------StudeT default correlations---" << endl;
         cout << "------------------------------------" << endl;
         for(Size iName1=0; iName1 <3; iName1++) {
             for(Size iName2=0; iName2 <3; iName2++)
@@ -192,6 +217,23 @@ int main(int, char* []) {
             cout << endl;
         }
         cout << endl;
+        cout << "----Gaussian rand def correlations----" << endl;
+        cout << "--------------------------------------" << endl;
+        for(Size iName1=0; iName1 <3; iName1++) {
+            for(Size iName2=0; iName2 <3; iName2++)
+                cout << rdlmG.defaultCorrelation(correlDate, iName1, iName2) 
+                    << " * ";
+            cout << endl;
+        }
+        cout << endl;
+        cout << "---- StudenT rand def correlations----" << endl;
+        cout << "--------------------------------------" << endl;
+        for(Size iName1=0; iName1 <3; iName1++) {
+            for(Size iName2=0; iName2 <3; iName2++)
+                cout << rdlmT.defaultCorrelation(correlDate, iName1, iName2) 
+                    << " * ";
+            cout << endl;
+        }
 
 
         Real seconds  = timer.elapsed();
