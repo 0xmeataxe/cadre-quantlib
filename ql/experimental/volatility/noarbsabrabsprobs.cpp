@@ -27,7 +27,7 @@
 
 // as long as we don't have a general solution, we apply
 // a local workaround here to satisfy both c++98 and 11
-#if !(defined(__GXX_EXPERIMENTAL_CXX0X__) || (__cplusplus >= 201103L) || (_MSC_VER >= 1600))
+#if (defined(__GXX_EXPERIMENTAL_CXX0X__) || (__cplusplus >= 201103L) || (_MSC_VER >= 1600))
 constexpr
 #else
 const
