@@ -26,57 +26,55 @@
 #include <ql/experimental/credit/constantlosslatentmodel.hpp>
 #include <ql/experimental/credit/defaultlossmodel.hpp>
 
+// Intended to replace InhomogeneousPoolCDOEngine in syntheticcdoengines.hpp
 
 namespace QuantLib {
 
     //-------------------------------------------------------------------------
-    //! Default loss distribution convolution for finite homogeneous pool
+    //! Default loss distribution convolution for finite non homogeneous pool
     /* A note on the number of buckets: As it is now the code goes splitting
     losses into buckets from loses equal to zero to losses up to the value of
     the underlying basket. This is in view of a stochastic loss given default
     but in a constant LGD situation this is a waste and it is more efficient to
     go up to the attainable losses.
+    \todo Extend to the multifactor case for a generic LM
+    \todo Many common code with the homogeneous version, both classes perform
+    the same work on different loss distribution types, merge and send the 
+    distribution object?
     */
-    // Identical, except for the distribution type, to the homogeneous 
-    //   case. Merge them
-    //
-    // Intended to replace HomogeneousPoolCDOEngine in syntheticcdoengines.hpp
+    template<class copulaPolicy>
     class InhomogeneousPoolLossModel : public DefaultLossModel {
     private:
-        void resetModel() /*const*/;
+        void resetModel();
     public:
         InhomogeneousPoolLossModel(
-      ////      const boost::shared_ptr<GaussianConstantLossLM>& copula,
-            const boost::shared_ptr<GaussianDefProbLM>& copula,
-            const std::vector<Real>& recoveries,
+        // restricted to non random recoveries, but it could be possible.
+            const boost::shared_ptr<ConstantLossLatentmodel<copulaPolicy> >& 
+                copula,
             Size nBuckets,
             Real max = 5.,
             Real min = -5.,
             Real nSteps = 50)
         : copula_(copula), 
           nBuckets_(nBuckets), 
-          recoveries_(recoveries),
           max_(max), min_(min), nSteps_(nSteps), delta_((max - min)/nSteps)
         { 
-            QL_REQUIRE(copula->numFactors() == 1, "Not implemented for multifactor");
+            QL_REQUIRE(copula->numFactors() == 1, 
+                "Inhomogeneous model not implemented for multifactor");
         }
-// Write another constructor sending the LM factors and recoveries.
-
-        ////void initialize(const Basket& basket) {
-        ///void setupBasket(const boost::shared_ptr<Basket>& basket);
-
+    // Write another constructor sending the LM factors and recoveries.
     protected:
-        //////////////////////////////Real recoveryValueImpl(const Date& defaultDate, Size iName,
-        //////////////////////////////    const std::vector<DefaultProbKey>& defKeys = 
-        //////////////////////////////        std::vector<DefaultProbKey>()) const {
-        //////////////////////////////        return recoveries_[iName];
-        //////////////////////////////}
         Distribution lossDistrib(const Date& d) const;
     public:
-        // TO DO: write a multifactor version 
         Real expectedTrancheLoss(const Date& d) const {
-            return lossDistrib(d).trancheExpectedValue(attach_ * notional_, 
-                detach_ * notional_);
+            return lossDistrib(d).cumulativeExcessProbability(attachAmount_, 
+              detachAmount_);
+            // This one if the distribution is over the whole loss structure:
+            // but it becomes very expensive
+            /*
+            return lossDistrib(d).trancheExpectedValue(
+                attachAmount_, detachAmount_);
+            */
         }
         Real percentile(const Date& d, Real percentile) const {
             Real portfLoss = lossDistrib(d).confidenceLevel(percentile);
@@ -89,22 +87,82 @@ namespace QuantLib {
             return dist.expectedShortfall(percentile);
         }
     protected:
-        const boost::shared_ptr<GaussianDefProbLM> copula_;
- ////////////////////////       const boost::shared_ptr<GaussianConstantLossLM> copula_;
+        const boost::shared_ptr<ConstantLossLatentmodel<copulaPolicy> > copula_;
         Size nBuckets_;
-        const std::vector<Real> recoveries_;
- ///////////////////////////       boost::shared_ptr<Basket> basket_;
         mutable Real attach_, detach_, notional_, attachAmount_, detachAmount_;
         mutable std::vector<Real> notionals_;
     private:
         // integration:
-        //  \todo move integration to latent model types when moving to a multifactor version
+        //  \todo move integration to latent model types when moving to a 
+        //  multifactor version
         const Real max_;// redundant?
         const Real min_;
         const Real nSteps_;
         const Real delta_; 
     };
-///// ADD TH EMISSING MEMBERS FROM LOSS DISTRIB!!!!!!!!
+    // \todo Add other loss distribution statistics
+    typedef InhomogeneousPoolLossModel<GaussianCopulaPolicy> 
+        IHGaussPoolLossModel;
+    typedef InhomogeneousPoolLossModel<TCopulaPolicy> IHStudentPoolLossModel;
+
+    //-----------------------------------------------------------------------
+
+    template<class CP>
+    void InhomogeneousPoolLossModel<CP>::resetModel()
+    {
+        // need to be capped now since the limit amounts might be over the 
+        //  remaining notional (think amortizing)
+        attach_ = std::min(basket_->remainingAttachmentAmount() / 
+            basket_->remainingNotional(), 1.);
+        detach_ = std::min(basket_->remainingDetachmentAmount() / 
+            basket_->remainingNotional(), 1.);
+        notional_ = basket_->remainingNotional();
+        notionals_ = basket_->remainingNotionals();
+        attachAmount_ = basket_->remainingAttachmentAmount();
+        detachAmount_ = basket_->remainingDetachmentAmount();
+
+        copula_->resetBasket(basket_.currentLink());
+    }
+
+    template<class CP>
+    Distribution InhomogeneousPoolLossModel<CP>::lossDistrib(
+        const Date& d) const 
+    {
+        LossDistBucketing bucktLDistBuff(nBuckets_, detachAmount_);
+
+        std::vector<Real> lgd;// switch to a mutable cache member
+        std::vector<Real> recoveries = copula_->recoveries();
+        std::transform(recoveries.begin(), recoveries.end(), 
+            std::back_inserter(lgd), std::bind1st(std::minus<Real>(), 1.));
+        std::transform(lgd.begin(), lgd.end(), notionals_.begin(), 
+            lgd.begin(), std::multiplies<Real>());
+        std::vector<Real> prob = basket_->remainingProbabilities(d);
+
+        // integrate locally (1 factor). 
+        // use explicitly a 1D latent model object? 
+        // \todo Use a library integrator here and in the homogeneous case.
+        Distribution dist(nBuckets_, 0.0, 
+            detachAmount_);
+            //notional_);
+        std::vector<Real> mkft(1, min_ + delta_ /2.);
+        for (Size i = 0; i < nSteps_; i++) {
+            std::vector<Real> conditionalProbs;
+            for(Size iName=0; iName<notionals_.size(); iName++)
+                conditionalProbs.push_back(
+                copula_->conditionalDefaultProbability(prob[iName], iName, 
+                    mkft));
+            Distribution d = bucktLDistBuff(lgd, conditionalProbs);
+            Real densitydm = delta_ * copula_->density(mkft);
+            // also, instead of calling the static method it could be wrapped 
+            // through an inlined call in the latent model
+            for (Size j = 0; j < nBuckets_; j++)
+                dist.addDensity(j, d.density(j) * densitydm);
+            mkft[0] += delta_;
+        }
+        return dist;
+    }
+
+
 }
 
 #endif
