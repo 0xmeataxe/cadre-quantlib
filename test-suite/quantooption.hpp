@@ -35,6 +35,7 @@ class QuantoOptionTest {
     static void testForwardGreeks();
     static void testForwardPerformanceValues();
     static void testBarrierValues();
+    static void testDoubleBarrierValues();
     static boost::unit_test_framework::test_suite* suite();
 };
 
