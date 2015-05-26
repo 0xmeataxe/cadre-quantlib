@@ -19,7 +19,6 @@
 */
 
 #include <ql/math/functional.hpp>
-#include <ql/instruments/payoffs.hpp>
 #include <ql/methods/finitedifferences/meshers/fdmmesher.hpp>
 #include <ql/methods/finitedifferences/operators/fdmlinearoplayout.hpp>
 #include <ql/methods/finitedifferences/operators/secondderivativeop.hpp>

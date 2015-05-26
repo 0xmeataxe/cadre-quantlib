@@ -32,10 +32,8 @@
 #include <ql/methods/finitedifferences/operators/fdmlinearopcomposite.hpp>
 
 namespace QuantLib {
-	Real squareRootProcessGreensFct(Real v0, Real kappa, Real theta,
-									Real sigma, Real t, Real x);
 
-    class FdmBlackScholesFwdOp : public FdmLinearOpComposite {
+class FdmBlackScholesFwdOp : public FdmLinearOpComposite {
       public:
         FdmBlackScholesFwdOp(
             const boost::shared_ptr<FdmMesher>& mesher,
