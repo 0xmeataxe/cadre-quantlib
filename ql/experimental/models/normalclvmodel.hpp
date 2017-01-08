@@ -21,19 +21,14 @@
     \brief CLV model with a normally distributed kernel process
 */
 
-#ifndef quantlib_normal_clv_mc_model_hpp
-#define quantlib_normal_clv_mc_model_hpp
+#ifndef quantlib_normal_clv_model_hpp
+#define quantlib_normal_clv_model_hpp
 
-#include <ql/handle.hpp>
-#include <ql/exercise.hpp>
 #include <ql/patterns/lazyobject.hpp>
-#include <ql/processes/blackscholesprocess.hpp>
-#include <ql/processes/ornsteinuhlenbeckprocess.hpp>
 #include <ql/math/interpolations/linearinterpolation.hpp>
 #include <ql/math/interpolations/lagrangeinterpolation.hpp>
 
 #include <boost/function.hpp>
-#include <functional>
 
 namespace QuantLib {
     /*! References:
@@ -45,6 +40,9 @@ namespace QuantLib {
     */
 
     class PricingEngine;
+    class GBSMRNDCalculator;
+    class OrnsteinUhlenbeckProcess;
+    class GeneralizedBlackScholesProcess;
 
     class NormalCLVModel : public LazyObject {
       public:
@@ -110,7 +108,7 @@ namespace QuantLib {
         const boost::shared_ptr<GeneralizedBlackScholesProcess> bsProcess_;
         const boost::shared_ptr<OrnsteinUhlenbeckProcess> ouProcess_;
         const std::vector<Date> maturityDates_;
-        const boost::shared_ptr<PricingEngine> pricingEngine_;
+        const boost::shared_ptr<GBSMRNDCalculator> rndCalculator_;
 
         std::vector<Time> maturityTimes_;
         mutable boost::function<Real(Time, Real)> g_;
