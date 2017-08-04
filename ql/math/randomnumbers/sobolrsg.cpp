@@ -78527,8 +78527,8 @@ namespace QuantLib {
 
         QL_REQUIRE(dimensionality>0,
                    "dimensionality must be greater than 0");
-      QL_REQUIRE(dimensionality<=PPMT_MAX_DIM,
-               "dimensionality " << dimensionality
+        QL_REQUIRE(dimensionality<=PPMT_MAX_DIM,
+                   "dimensionality " << dimensionality
                    << " exceeds the number of available "
                    << "primitive polynomials modulo two ("
                    << PPMT_MAX_DIM << ")");
@@ -78841,7 +78841,7 @@ namespace QuantLib {
         // increment the counter
         sequenceCounter_++;
         // did we overflow?
-     QL_REQUIRE(sequenceCounter_ != 0, "period exceeded");
+        QL_REQUIRE(sequenceCounter_ != 0, "period exceeded");
 
         // instead of using the counter n as new unique generating integer
         // for the n-th draw use the Gray code G(n) as proposed
