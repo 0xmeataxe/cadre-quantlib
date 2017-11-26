@@ -78518,7 +78518,7 @@ namespace QuantLib {
         0.5/(1UL<<(SobolRsg::bits_-1));
 
     SobolRsg::SobolRsg(Size dimensionality,
-                       uint32_t seed,
+                       unsigned long seed,
                        DirectionIntegers directionIntegers)
     : dimensionality_(dimensionality), sequenceCounter_(0), firstDraw_(true),
       sequence_(std::vector<Real> (dimensionality), 1.0),
