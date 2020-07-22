@@ -78709,7 +78709,7 @@ namespace QuantLib {
                         // rightmost l bits non-zero
                         directionIntegers_[k][l-1] =
                             (boost::uint_least32_t)(u*(1UL<<l));
-                    } while ((directionIntegers_[k][l - 1] & 1UL) == 0u);
+                    } while ((directionIntegers_[k][l - 1] & 1UL) == 0U);
                     // iterate until the direction integer is odd
                     // that is it has the rightmost bit set
 
@@ -78740,7 +78740,7 @@ namespace QuantLib {
                 for (Size j=1; j<gk; j++) {
                     // XORed with a selection of (unshifted) direction
                     // integers controlled by which of the a[k][j] are set
-                    if (((ppmt[k] >> (gk - j - 1)) & 1UL) != 0u)
+                    if (((ppmt[k] >> (gk - j - 1)) & 1UL) != 0U)
                         n ^= directionIntegers_[k][l-j];
                 }
                 // a[k][gk] is always set, so directionIntegers_[k][l-gk]
@@ -78783,7 +78783,7 @@ namespace QuantLib {
         for (Size k=0; k<dimensionality_; k++) {
             integerSequence_[k] = 0;
             for (Size index=0; index<ops; index++) {
-                if ((G >> index & 1) != 0u)
+                if ((G >> index & 1) != 0U)
                     integerSequence_[k] ^= directionIntegers_[k][index];
             }
         }
@@ -78811,7 +78811,7 @@ namespace QuantLib {
         boost::uint_least32_t n = sequenceCounter_;
         // Find rightmost zero bit of n
         int j = 0;
-        while ((n & 1) != 0u) {
+        while ((n & 1) != 0U) {
             n >>= 1;
             j++;
         }
