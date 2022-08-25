@@ -78479,13 +78479,10 @@ namespace QuantLib {
     const double SobolRsg::normalizationFactor_ =
         0.5/(1UL<<(SobolRsg::bits_-1));
 
-    SobolRsg::SobolRsg(Size dimensionality,
-                       unsigned long seed,
-                       DirectionIntegers directionIntegers)
-    : dimensionality_(dimensionality), sequenceCounter_(0), firstDraw_(true),
-      sequence_(std::vector<Real> (dimensionality), 1.0),
+    SobolRsg::SobolRsg(Size dimensionality, unsigned long seed, DirectionIntegers directionIntegers)
+    : dimensionality_(dimensionality), sequence_(std::vector<Real>(dimensionality), 1.0),
       integerSequence_(dimensionality, 0),
-      directionIntegers_(dimensionality,std::vector<std::uint_least32_t>(bits_)) {
+      directionIntegers_(dimensionality, std::vector<std::uint_least32_t>(bits_)) {
 
         QL_REQUIRE(dimensionality>0,
                    "dimensionality must be greater than 0");
