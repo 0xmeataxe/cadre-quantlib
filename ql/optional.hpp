@@ -38,10 +38,12 @@ namespace QuantLib {
 
         #if defined(QL_USE_STD_OPTIONAL)
         using std::optional;                    // NOLINT(misc-unused-using-decls)
-        constexpr const std::nullopt_t& nullopt() { return std::nullopt; }
+        // here we can assume C++17
+        inline constexpr const std::nullopt_t& nullopt = std::nullopt;
         #else
         using boost::optional;                  // NOLINT(misc-unused-using-decls)
-        constexpr const boost::none_t& nullopt() { return boost::none; }
+        // here we can't
+        extern const boost::none_t& nullopt;
         #endif
 
     }
