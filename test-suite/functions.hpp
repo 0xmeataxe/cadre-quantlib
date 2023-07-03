@@ -33,6 +33,9 @@ class FunctionsTest {
     static void testGammaValues();
     static void testModifiedBesselFunctions();
     static void testWeightedModifiedBesselFunctions();
+    static void testExpm1();
+    static void testLog1p();
+
     static boost::unit_test_framework::test_suite* suite();
 };
 
