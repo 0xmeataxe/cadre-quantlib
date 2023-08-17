@@ -18,36 +18,24 @@
 */
 
 #include <ql/math/randomnumbers/seedgenerator.hpp>
+#include <ql/math/randomnumbers/splitmix64.hpp>
 #include <ql/math/randomnumbers/xoshiro256starstaruniformrng.hpp>
 
 namespace QuantLib {
 
-    Xoshiro256StarStarUniformRng::Xoshiro256StarStarUniformRng(uint64_t seed)
-    : Xoshiro256StarStarUniformRng(seed, seed, seed, seed) {}
+    Xoshiro256StarStarUniformRng::Xoshiro256StarStarUniformRng(uint64_t seed) {
+        SplitMix64 splitMix64(seed != 0 ? seed : SeedGenerator::instance().get());
+        do {
+            s0_ = splitMix64.next();
+            s1_ = splitMix64.next();
+            s2_ = splitMix64.next();
+            s3_ = splitMix64.next();
+        } while (s0_ == 0 && s1_ == 0 && s2_ == 0 && s3_ == 0);
+    }
 
     Xoshiro256StarStarUniformRng::Xoshiro256StarStarUniformRng(uint64_t s0,
                                                                uint64_t s1,
                                                                uint64_t s2,
                                                                uint64_t s3)
-    : s0_(s0), s1_(s1), s2_(s2), s3_(s3) {
-        seedInitialization();
-
-        // We call nextInt64() 1,000 times as the first random numbers
-        // might be "close" to the given seeds.
-        // See https://github.com/lballabio/QuantLib/pull/1769#discussion_r1296997133
-        for (auto i = 0; i < 1'000; ++i) {
-            nextInt64();
-        }
-    }
-
-    void Xoshiro256StarStarUniformRng::seedInitialization() const {
-        if (s0_ == 0 && s1_ == 0 && s2_ == 0 && s3_ == 0) {
-            do {
-                s0_ = SeedGenerator::instance().get();
-                s1_ = SeedGenerator::instance().get();
-                s2_ = SeedGenerator::instance().get();
-                s3_ = SeedGenerator::instance().get();
-            } while (s0_ == 0 || s1_ == 0 || s2_ == 0 || s3_ == 0);
-        }
-    }
+    : s0_(s0), s1_(s1), s2_(s2), s3_(s3) {}
 }
