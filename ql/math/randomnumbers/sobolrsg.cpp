@@ -78479,10 +78479,14 @@ namespace QuantLib {
     const double SobolRsg::normalizationFactor_ =
         0.5/(1UL<<(SobolRsg::bits_-1));
 
-    SobolRsg::SobolRsg(Size dimensionality, unsigned long seed, DirectionIntegers directionIntegers)
+    SobolRsg::SobolRsg(Size dimensionality,
+                       unsigned long seed,
+                       DirectionIntegers directionIntegers,
+                       bool useGrayCode)
     : dimensionality_(dimensionality), sequence_(std::vector<Real>(dimensionality), 1.0),
       integerSequence_(dimensionality, 0),
-      directionIntegers_(dimensionality, std::vector<std::uint_least32_t>(bits_)) {
+      directionIntegers_(dimensionality, std::vector<std::uint_least32_t>(bits_)),
+      useGrayCode_(useGrayCode) {
 
         QL_REQUIRE(dimensionality>0,
                    "dimensionality must be greater than 0");
@@ -78765,33 +78769,60 @@ namespace QuantLib {
         */
 
         // initialize the Sobol integer/double vectors
-        // first draw
-        for (k=0; k<dimensionality_; k++) {
-            integerSequence_[k]=directionIntegers_[k][0];
+        // first draw, this is only needed if Gray code is used
+        if (useGrayCode_) {
+            for (k = 0; k < dimensionality_; k++) {
+                integerSequence_[k] = directionIntegers_[k][0];
+            }
         }
     }
 
-    void SobolRsg::skipTo(std::uint_least32_t skip) {
-        std::uint_least32_t N = skip+1;
-        unsigned int ops = (unsigned int)(std::log((double)N)/M_LN2)+1;
+    const std::vector<std::uint_least32_t>& SobolRsg::skipTo(std::uint_least32_t skip) const {
+        std::uint_least32_t N = skip + 1;
 
-        // Convert to Gray code
-        std::uint_least32_t G = N ^ (N>>1);
-        for (Size k=0; k<dimensionality_; k++) {
-            integerSequence_[k] = 0;
-            for (Size index=0; index<ops; index++) {
-                if ((G >> index & 1) != 0U)
-                    integerSequence_[k] ^= directionIntegers_[k][index];
+        if (useGrayCode_) {
+            unsigned int ops = (unsigned int)(std::log((double)N) / M_LN2) + 1;
+
+            // Convert to Gray code
+            std::uint_least32_t G = N ^ (N >> 1);
+            for (Size k = 0; k < dimensionality_; k++) {
+                integerSequence_[k] = 0;
+                for (Size index = 0; index < ops; index++) {
+                    if ((G >> index & 1) != 0U)
+                        integerSequence_[k] ^= directionIntegers_[k][index];
+                }
+            }
+        } else {
+            std::fill(integerSequence_.begin(), integerSequence_.end(), 0.0);
+            std::uint_least32_t mask = 1;
+            for (Size index = 0; index < bits_; index++) {
+                if ((N & mask) != 0U) {
+                    for (Size k = 0; k < dimensionality_; k++) {
+                        integerSequence_[k] ^= directionIntegers_[k][index];
+                    }
+                }
+                mask = mask << 1;
             }
         }
 
         sequenceCounter_ = skip;
+        return integerSequence_;
     }
-
-
 
     const std::vector<std::uint_least32_t>& SobolRsg::nextInt32Sequence() const
     {
+
+        if (!useGrayCode_) {
+            skipTo(sequenceCounter_);
+            if (firstDraw_) {
+                firstDraw_ = false;
+            } else {
+                ++sequenceCounter_;
+                QL_REQUIRE(sequenceCounter_ != 0, "period exceeded");
+            }
+            return integerSequence_;
+        }
+
         if (firstDraw_) {
             // it was precomputed in the constructor
             firstDraw_ = false;
