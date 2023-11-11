@@ -78793,7 +78793,7 @@ namespace QuantLib {
                 }
             }
         } else {
-            std::fill(integerSequence_.begin(), integerSequence_.end(), 0.0);
+            std::fill(integerSequence_.begin(), integerSequence_.end(), 0u);
             std::uint_least32_t mask = 1;
             for (Size index = 0; index < bits_; index++) {
                 if ((N & mask) != 0U) {
