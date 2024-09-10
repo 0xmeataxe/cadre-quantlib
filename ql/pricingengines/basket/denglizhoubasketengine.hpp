@@ -29,7 +29,7 @@
 
 namespace QuantLib {
 
-    //! Pricing engine for basket option on two futures
+    //! Pricing engine for basket option on multiple underlyings
     /*! This class implements the pricing formula from
         "Multi-asset Spread Option Pricing and Hedging",
         S. Deng, M. Li, J.Zhou, 2008
@@ -37,15 +37,13 @@ namespace QuantLib {
 
         The typo in formula (37) for J^2 is corrected
 
-        This pricing formula works only if exactly one asset weight is positive.
+        This pricing formula only works if exactly one asset weight is positive.
         If more than one weight is positive then a mapping of the sum of correlated
-        log-normal processes onto one log-normal process has to has be carried out.
-        This implementation is using
-
+        log-normal processes onto one log-normal process has to be carried out.
+        This implementation is using:
         "WKB Approximation for the Sum of Two Correlated Lognormal Random Variables",
         C.F. Lo 2013
         https://www.m-hikari.com/ams/ams-2013/ams-125-128-2013/loAMS125-128-2013.pdf
-
         for this task.
 
         \ingroup basketengines
