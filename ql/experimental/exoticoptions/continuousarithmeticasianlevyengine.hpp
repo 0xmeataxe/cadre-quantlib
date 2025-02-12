@@ -21,29 +21,12 @@
     \brief Levy engine for continuous arithmetic Asian options
 */
 
-#ifndef quantlib_continuous_arithmetic_asian_levy_engine_hpp
-#define quantlib_continuous_arithmetic_asian_levy_engine_hpp
+#ifndef quantlib_experimental_continuous_arithmetic_asian_levy_engine_hpp
+#define quantlib_experimental_continuous_arithmetic_asian_levy_engine_hpp
 
-#include <ql/instruments/asianoption.hpp>
-#include <ql/processes/blackscholesprocess.hpp>
+// Deprecated in version 1.38
+#pragma message("Warning: this file will disappear in a future release; include <ql/pricingengines/asian/continuousarithmeticasianlevyengine.hpp> instead.")
 
-namespace QuantLib {
-
-    class ContinuousArithmeticAsianLevyEngine
-        : public ContinuousAveragingAsianOption::engine {
-      public:
-        ContinuousArithmeticAsianLevyEngine(ext::shared_ptr<GeneralizedBlackScholesProcess> process,
-                                            Handle<Quote> currentAverage,
-                                            Date startDate);
-        void calculate() const override;
-
-      private:
-        ext::shared_ptr<GeneralizedBlackScholesProcess> process_;
-        Handle<Quote> currentAverage_ ;
-        Date startDate_;
-    };
-
-}
-
+#include <ql/pricingengines/asian/continuousarithmeticasianlevyengine.hpp>
 
 #endif
