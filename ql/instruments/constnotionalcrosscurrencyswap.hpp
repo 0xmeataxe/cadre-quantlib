@@ -22,13 +22,10 @@
     \brief Generic constant-notional cross currency swap
 */
 
-#ifndef quantlib_cross_currency_swap_hpp
-#define quantlib_cross_currency_swap_hpp
+#ifndef quantlib_const_notional_cross_currency_swap_hpp
+#define quantlib_const_notional_cross_currency_swap_hpp
 
-#include <ql/currency.hpp>
-#include <ql/instruments/swap.hpp>
-#include <ql/time/calendar.hpp>
-#include <ql/time/businessdayconvention.hpp>
+#include <ql/instruments/crosscurrencyswap.hpp>
 
 namespace QuantLib {
 
@@ -40,7 +37,7 @@ namespace QuantLib {
 
     \ingroup instruments
 */
-class ConstNotionalCrossCurrencySwap : public Swap {
+class ConstNotionalCrossCurrencySwap : public CrossCurrencySwap {
   public:
     class arguments;
     class results;
@@ -86,23 +83,16 @@ class ConstNotionalCrossCurrencySwap : public Swap {
     //! \name Additional interface
     //@{
     const Currency& legCurrency(Size j) const {
-        QL_REQUIRE(j < legs_.size(), "leg# " << j << " doesn't exist!");
-        return currencies_[j];
+        return CrossCurrencySwap::legCurrency(j);
     }
     Real inCcyLegBPS(Size j) const {
-        QL_REQUIRE(j < legs_.size(), "leg# " << j << " doesn't exist!");
-        calculate();
-        return inCcyLegBPS_[j];
+        return CrossCurrencySwap::inCcyLegBPS(j);
     }
     Real inCcyLegNPV(Size j) const {
-        QL_REQUIRE(j < legs_.size(), "leg #" << j << " doesn't exist!");
-        calculate();
-        return inCcyLegNPV_[j];
+        return CrossCurrencySwap::inCcyLegNPV(j);
     }
     DiscountFactor npvDateDiscounts(Size j) const {
-        QL_REQUIRE(j < legs_.size(), "leg #" << j << " doesn't exist!");
-        calculate();
-        return npvDateDiscounts_[j];
+        return CrossCurrencySwap::npvDateDiscounts(j);
     }
     //@}
 protected:
@@ -118,31 +108,18 @@ protected:
     void setupExpired() const override;
     //@}
 
-    static void addNotionalExchangesToLeg(Leg& leg, const Calendar& calendar, 
-        Date earliestDate, Date maturityDate, Natural paymentLag, 
-        BusinessDayConvention legBdc, Real nominal);
-
-    std::vector<Currency> currencies_;
-
-  private:
-    mutable std::vector<Real> inCcyLegNPV_;
-    mutable std::vector<Real> inCcyLegBPS_;
-    mutable std::vector<DiscountFactor> npvDateDiscounts_;
+    using CrossCurrencySwap::addNotionalExchangesToLeg;
 };
 
 
-class ConstNotionalCrossCurrencySwap::arguments : public Swap::arguments {
+class ConstNotionalCrossCurrencySwap::arguments : public CrossCurrencySwap::arguments {
   public:
-    std::vector<Currency> currencies;
     void validate() const override;
 };
 
 
-class ConstNotionalCrossCurrencySwap::results : public Swap::results {
+class ConstNotionalCrossCurrencySwap::results : public CrossCurrencySwap::results {
   public:
-    std::vector<Real> inCcyLegNPV;
-    std::vector<Real> inCcyLegBPS;
-    std::vector<DiscountFactor> npvDateDiscounts;
     void reset() override;
 };
 
