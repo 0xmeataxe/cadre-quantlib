@@ -1,57 +1,55 @@
+# Cadre QuantLib
 
-# QuantLib: the free/open-source library for quantitative finance
+A Cadre distribution of [QuantLib](https://github.com/lballabio/QuantLib),
+the open-source C++ library for quantitative finance, modeling, trading,
+and risk management.
 
-[![Download](https://img.shields.io/github/v/release/lballabio/QuantLib?label=Download&sort=semver)](https://github.com/lballabio/QuantLib/releases/latest)
-[![Licensed under the BSD 3-Clause License](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://github.com/lballabio/QuantLib/blob/master/LICENSE.TXT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1440997.svg)](https://doi.org/10.5281/zenodo.1440997)
-[![PRs Welcome](https://img.shields.io/badge/PRs%20-welcome-brightgreen.svg)](https://github.com/lballabio/QuantLib/blob/master/CONTRIBUTING.md)
+This repository imports the upstream commit history. The Git author field
+identifies the Cadre importer; original authors and source commit IDs are retained
+in commit trailers. Commit dates and count match upstream. Cadre packaging is
+folded into the final imported commit; its date belongs to upstream, not the
+packaging work. See [PROVENANCE.md](PROVENANCE.md).
+Cadre changes currently cover repository branding and documentation.
+Original contributors retain credit for their work.
 
-[![Linux build status](https://github.com/lballabio/QuantLib/actions/workflows/linux.yml/badge.svg)](https://github.com/lballabio/QuantLib/actions/workflows/linux.yml)
-[![Windows build status](https://github.com/lballabio/QuantLib/actions/workflows/msvc.yml/badge.svg)](https://github.com/lballabio/QuantLib/actions/workflows/msvc.yml)
-[![Mac OS build status](https://github.com/lballabio/QuantLib/actions/workflows/macos.yml/badge.svg)](https://github.com/lballabio/QuantLib/actions/workflows/macos.yml)
-[![CMake build status](https://github.com/lballabio/QuantLib/actions/workflows/cmake.yml/badge.svg)](https://github.com/lballabio/QuantLib/actions/workflows/cmake.yml)
+## Get started
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b4bc1058db994f24aa931b119a885eea)](https://www.codacy.com/gh/lballabio/QuantLib/dashboard)
-[![Coverage Status](https://coveralls.io/repos/github/lballabio/QuantLib/badge.svg?branch=master)](https://coveralls.io/github/lballabio/QuantLib?branch=master)
+```bash
+git clone https://github.com/0xmeataxe/cadre-quantlib.git
+cd cadre-quantlib
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel 2
+./build/test-suite/quantlib-test-suite --log_level=message
+```
 
----
+The library requires a C++17 compiler, CMake, and Boost. Consult the
+[upstream installation guide](https://www.quantlib.org/install.shtml)
+for platform prerequisites and alternative build systems.
+The C++ namespace, headers, library names, and build targets remain `QuantLib`
+compatible; Cadre is the distribution name.
 
-The QuantLib project (<https://www.quantlib.org>) is aimed at providing a
-comprehensive software framework for quantitative finance. QuantLib is
-a free/open-source library for modeling, trading, and risk management
-in real-life.
+## Documentation
 
-QuantLib is Non-Copylefted Free Software and OSI Certified Open Source
-Software.
+- [Library usage and design](https://www.quantlib.org/docs.shtml)
+- [Upstream API reference](https://www.quantlib.org/reference/)
+- [Documentation sources](Docs/pages)
+- [Examples](Examples)
+- [Upstream release history](https://www.quantlib.org/reference/history.html)
 
+Generated documentation uses the Cadre QuantLib project title.
+Upstream documentation and releases are maintained by the QuantLib project.
 
-## Download and usage
+## Feedback and contributions
 
-QuantLib can be downloaded from <https://www.quantlib.org/download.shtml>;
-installation instructions are available at
-<https://www.quantlib.org/install.shtml> for most platforms.
+Report Cadre packaging and documentation issues in
+[this repository](https://github.com/0xmeataxe/cadre-quantlib/issues).
+For upstream library questions, see the
+[QuantLib mailing lists](https://www.quantlib.org/mailinglists.shtml).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for upstream contribution guidance.
 
-Documentation for the usage and the design of the QuantLib library is
-available from <https://www.quantlib.org/docs.shtml>.
+## License and attribution
 
-A list of changes for each past versions of the library can be
-browsed at <https://www.quantlib.org/reference/history.html>.
-
-
-## Questions and feedback
-
-The preferred channel for questions (and the one with the largest
-audience) is the quantlib-users mailing list.  Instructions for
-subscribing are at <https://www.quantlib.org/mailinglists.shtml>.
-
-Bugs can be reported as a GitHub issue at
-<https://github.com/lballabio/QuantLib/issues>; if you have a patch
-available, you can open a pull request instead (see "Contributing"
-below).
-
-
-## Contributing
-
-Contributions are very welcome!  Details are in
-[CONTRIBUTING.md](https://github.com/lballabio/QuantLib/blob/master/CONTRIBUTING.md)
-
+QuantLib is distributed under its modified BSD license; see
+[LICENSE.TXT](LICENSE.TXT) and [contributors](Docs/pages/authors.docs).
+Original copyright notices, license terms, and source attribution are
+preserved. Upstream development history is available in the original repository. This distribution does not imply endorsement by upstream authors.

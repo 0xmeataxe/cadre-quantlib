@@ -16,7 +16,14 @@
  FOR A PARTICULAR PURPOSE.  See the license for more details.
 */
 
-/*! \mainpage Introduction
+/*! \mainpage Cadre QuantLib
+
+    Cadre QuantLib is a distribution of the upstream QuantLib library
+    (https://github.com/lballabio/QuantLib). This distribution preserves
+    the original implementation, contributor attribution, and license notices.
+    The project is imported as a single source snapshot.
+    Cadre changes currently cover repository branding and documentation.
+    Source: https://github.com/0xmeataxe/cadre-quantlib
 
     %QuantLib (https://www.quantlib.org/) is a C++ library for
     financial quantitative analysts and developers.

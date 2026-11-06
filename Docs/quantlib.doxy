@@ -4,9 +4,9 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = QuantLib
+PROJECT_NAME           = "Cadre QuantLib"
 PROJECT_NUMBER         = ql_version
-PROJECT_BRIEF          = "A free/open-source library for quantitative finance"
+PROJECT_BRIEF          = "Cadre distribution of the QuantLib quantitative finance library"
 PROJECT_LOGO           =
 PROJECT_ICON           =
 OUTPUT_DIRECTORY       =
